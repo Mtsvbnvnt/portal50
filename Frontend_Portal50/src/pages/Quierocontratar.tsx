@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 
 export default function QuieroContratar() {
+  const { user } = require("../context/UserContext");
   return (
     <main className="min-h-screen bg-white text-gray-800">
       {/* HERO */}
@@ -11,6 +12,16 @@ export default function QuieroContratar() {
         <p className="mb-6 max-w-2xl mx-auto text-lg text-gray-600">
           Te ayudamos a encontrar profesionales certificados, ya sea para trabajos por horas o jornadas completas.
         </p>
+        {!user && (
+          <div className="max-w-lg mx-auto mt-8 p-6 bg-white rounded shadow">
+            <h2 className="text-xl font-bold mb-2 text-blue-600">¿Eres empresa?</h2>
+            <p className="mb-4 text-gray-700">Regístrate y accede a nuestro banco de profesionales certificados. Te ayudamos a encontrar el talento que tu empresa necesita.</p>
+            <div className="flex flex-col gap-4">
+              <Link to="/register?tipo=empresa" className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-full transition">Crear cuenta de empresa</Link>
+              <Link to="/login?tipo=empresa" className="bg-gray-200 hover:bg-gray-300 text-blue-600 px-6 py-2 rounded-full transition">Iniciar sesión como empresa</Link>
+            </div>
+          </div>
+        )}
       </section>
 
       {/* SELECCIÓN DE CONTRATACIÓN */}

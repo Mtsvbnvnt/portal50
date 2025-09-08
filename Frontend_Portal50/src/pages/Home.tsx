@@ -1,11 +1,13 @@
 // src/pages/Home.tsx
 import { Link, useLocation } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
+import { UserContext } from "../context/UserContext";
 
 export default function Home() {
   const location = useLocation();
   const [showSuccess, setShowSuccess] = useState(location.state?.success);
   const [showLoginSuccess, setShowLoginSuccess] = useState(location.state?.loginSuccess);
+  const { user } = useContext(UserContext);
 
   useEffect(() => {
     if (location.state?.success) {
@@ -48,20 +50,37 @@ export default function Home() {
         <p className="text-lg mb-8 max-w-2xl mx-auto">
           Tu comunidad para conectar empresas, profesionales y aprendices con oportunidades reales.
         </p>
-        <div className="space-x-4">
-          <Link
-            to="/register"
-            className="bg-blue-600 text-white px-8 py-3 rounded-full hover:bg-blue-700 transition"
-          >
-            Regístrate
-          </Link>
-          <Link
-            to="/login"
-            className="bg-gray-300 text-gray-800 px-8 py-3 rounded-full hover:bg-gray-400 transition"
-          >
-            Iniciar Sesión
-          </Link>
-        </div>
+        {user ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 max-w-4xl mx-auto mt-8">
+            <Link to="/aprender" className="border p-6 sm:p-8 rounded shadow hover:shadow-lg transition block bg-white hover:bg-blue-50">
+              <h3 className="text-xl sm:text-2xl font-bold mb-2 text-blue-600">Quiero aprender</h3>
+              <p className="text-gray-600 text-sm sm:text-base">Accede a cursos y mentorías para potenciar tus habilidades.</p>
+            </Link>
+            <Link to="/trabajar" className="border p-6 sm:p-8 rounded shadow hover:shadow-lg transition block bg-white hover:bg-green-50">
+              <h3 className="text-xl sm:text-2xl font-bold mb-2 text-green-600">Quiero trabajar</h3>
+              <p className="text-gray-600 text-sm sm:text-base">Encuentra ofertas laborales y postula a empleos.</p>
+            </Link>
+            <Link to="/dashboard" className="border p-6 sm:p-8 rounded shadow hover:shadow-lg transition block bg-white hover:bg-purple-50">
+              <h3 className="text-xl sm:text-2xl font-bold mb-2 text-purple-600">Postulaciones</h3>
+              <p className="text-gray-600 text-sm sm:text-base">Revisa el estado de tus postulaciones y tu perfil.</p>
+            </Link>
+          </div>
+        ) : (
+          <div className="space-x-4">
+            <Link
+              to="/register"
+              className="bg-blue-600 text-white px-8 py-3 rounded-full hover:bg-blue-700 transition"
+            >
+              Regístrate
+            </Link>
+            <Link
+              to="/login"
+              className="bg-gray-300 text-gray-800 px-8 py-3 rounded-full hover:bg-gray-400 transition"
+            >
+              Iniciar Sesión
+            </Link>
+          </div>
+        )}
       </section>
 
       {/* Sección de información destacada */}
@@ -72,24 +91,24 @@ export default function Home() {
           empresas que valoran el talento y aprendices que buscan crecer.
         </p>
         <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-          <div className="border p-6 rounded shadow hover:shadow-lg transition">
-            <h3 className="text-xl font-bold mb-2">Profesionales</h3>
-            <p className="text-gray-600">
-              Publica tu perfil, muestra tu experiencia y encuentra proyectos alineados a tu trayectoria.
-            </p>
-          </div>
-          <div className="border p-6 rounded shadow hover:shadow-lg transition">
-            <h3 className="text-xl font-bold mb-2">Empresas</h3>
-            <p className="text-gray-600">
-              Accede a un banco de talento calificado y crea ofertas laborales con impacto.
-            </p>
-          </div>
-          <div className="border p-6 rounded shadow hover:shadow-lg transition">
-            <h3 className="text-xl font-bold mb-2">Aprendices</h3>
-            <p className="text-gray-600">
-              Encuentra cursos, mentorías y oportunidades para potenciar tus habilidades.
-            </p>
-          </div>
+            <div className="border p-4 sm:p-6 rounded shadow hover:shadow-lg transition bg-white hover:bg-blue-50">
+              <h3 className="text-lg sm:text-xl font-bold mb-2">Profesionales</h3>
+              <p className="text-gray-600 text-sm sm:text-base">
+                Encuentra trabajo, publica tu perfil y accede a cursos para mejorar tus habilidades.
+              </p>
+            </div>
+            <div className="border p-4 sm:p-6 rounded shadow hover:shadow-lg transition bg-white hover:bg-green-50">
+              <h3 className="text-lg sm:text-xl font-bold mb-2">Empresas</h3>
+              <p className="text-gray-600 text-sm sm:text-base">
+                Publica ofertas laborales, busca talento y conecta con profesionales capacitados.
+              </p>
+            </div>
+            <div className="border p-4 sm:p-6 rounded shadow hover:shadow-lg transition bg-white hover:bg-purple-50">
+              <h3 className="text-lg sm:text-xl font-bold mb-2">Aprendices</h3>
+              <p className="text-gray-600 text-sm sm:text-base">
+                Accede a cursos, mentorías y oportunidades para iniciar tu carrera profesional.
+              </p>
+            </div>
         </div>
       </section>
 

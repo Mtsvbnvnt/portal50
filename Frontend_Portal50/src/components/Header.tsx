@@ -3,7 +3,7 @@ import { useEffect, useState, useContext } from "react";
 import { auth } from "../firebase";
 import { LiaChartPieSolid, LiaCogSolid, LiaTimesSolid } from "react-icons/lia";
 import { FaUserCircle } from "react-icons/fa";
-import { UserContext } from "../context/UserContext";
+  import { UserContext } from "../context/UserContext";
 
 export default function Header() {
   const navigate = useNavigate();
@@ -100,14 +100,14 @@ export default function Header() {
   };
 
   return (
-    <header className="bg-gray-200 text-gray-800 py-4 shadow">
-      <div className="container mx-auto flex items-center px-4">
+    <header className="bg-gray-200 text-gray-800 py-4 shadow w-full">
+      <div className="container mx-auto flex flex-col md:flex-row items-center px-4">
         {/* IZQUIERDA */}
-        <Link to="/" className="flex items-center space-x-2 text-2xl font-bold">
+        <Link to="/" className="flex items-center space-x-2 text-2xl font-bold mb-2 md:mb-0">
           <img
             src="/Portal50.png"
             alt="Logo Portal 50+"
-            className="w-12 h-12 object-contain"
+            className="w-10 h-10 md:w-12 md:h-12 object-contain"
           />
           <div>
             <span className="text-black">Portal</span>
@@ -116,7 +116,7 @@ export default function Header() {
         </Link>
 
         {/* CENTRO */}
-        <nav className="flex-1 flex justify-center space-x-6">
+        <nav className="flex-1 flex flex-wrap justify-center space-x-2 md:space-x-6 text-base md:text-lg">
           <Link to="/" className="hover:text-blue-600">Inicio</Link>
           <Link to="/quiero-contratar" className="hover:text-blue-600">Quiero Contratar</Link>
           <Link to="/trabajar" className="hover:text-blue-600">Quiero Trabajar</Link>
@@ -124,7 +124,7 @@ export default function Header() {
         </nav>
 
         {/* DERECHA */}
-        <div className="relative ml-auto flex items-center">
+        <div className="relative ml-0 md:ml-auto flex items-center mt-2 md:mt-0">
           {user ? (
             <div className="relative group inline-block">
               <div className="flex items-center space-x-2 cursor-pointer">
@@ -184,8 +184,8 @@ export default function Header() {
             </div>
           ) : (
             <div className="space-x-4">
-              <Link to="/login" className="hover:text-blue-600">Iniciar</Link>
-              <Link to="/register" className="hover:text-blue-600">Registrarse</Link>
+              <Link to="/login" className="hover:text-blue-600">Iniciar Sesión</Link>
+              <Link to="/register" className="hover:text-blue-600">Regístrate</Link>
             </div>
           )}
         </div>
