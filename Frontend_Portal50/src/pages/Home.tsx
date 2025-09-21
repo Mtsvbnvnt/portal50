@@ -91,24 +91,27 @@ export default function Home() {
           empresas que valoran el talento y aprendices que buscan crecer.
         </p>
         <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-            <div className="border p-4 sm:p-6 rounded shadow hover:shadow-lg transition bg-white hover:bg-blue-50">
+            <Link to="/register-usuario" className="border p-4 sm:p-6 rounded shadow hover:shadow-lg transition bg-white hover:bg-blue-50 cursor-pointer block">
               <h3 className="text-lg sm:text-xl font-bold mb-2">Profesionales</h3>
               <p className="text-gray-600 text-sm sm:text-base">
                 Encuentra trabajo, publica tu perfil y accede a cursos para mejorar tus habilidades.
               </p>
-            </div>
-            <div className="border p-4 sm:p-6 rounded shadow hover:shadow-lg transition bg-white hover:bg-green-50">
+              <span className="mt-3 inline-block text-blue-600 font-semibold">Regístrate como profesional →</span>
+            </Link>
+            <Link to="/register-empresa" className="border p-4 sm:p-6 rounded shadow hover:shadow-lg transition bg-white hover:bg-green-50 cursor-pointer block">
               <h3 className="text-lg sm:text-xl font-bold mb-2">Empresas</h3>
               <p className="text-gray-600 text-sm sm:text-base">
                 Publica ofertas laborales, busca talento y conecta con profesionales capacitados.
               </p>
-            </div>
-            <div className="border p-4 sm:p-6 rounded shadow hover:shadow-lg transition bg-white hover:bg-purple-50">
+              <span className="mt-3 inline-block text-green-600 font-semibold">Regístrate como empresa →</span>
+            </Link>
+            <Link to="/register-usuario?rol=aprendiz" className="border p-4 sm:p-6 rounded shadow hover:shadow-lg transition bg-white hover:bg-purple-50 cursor-pointer block">
               <h3 className="text-lg sm:text-xl font-bold mb-2">Aprendices</h3>
               <p className="text-gray-600 text-sm sm:text-base">
                 Accede a cursos, mentorías y oportunidades para iniciar tu carrera profesional.
               </p>
-            </div>
+              <span className="mt-3 inline-block text-purple-600 font-semibold">Regístrate como aprendiz →</span>
+            </Link>
         </div>
       </section>
 

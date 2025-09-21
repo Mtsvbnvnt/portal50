@@ -1,7 +1,10 @@
 import { Link } from "react-router-dom";
+import { useContext } from "react";
+import { UserContext } from "../context/UserContext";
 
 export default function QuieroContratar() {
-  const { user } = require("../context/UserContext");
+  const { user } = useContext(UserContext);
+
   return (
     <main className="min-h-screen bg-white text-gray-800">
       {/* HERO */}
@@ -12,14 +15,32 @@ export default function QuieroContratar() {
         <p className="mb-6 max-w-2xl mx-auto text-lg text-gray-600">
           Te ayudamos a encontrar profesionales certificados, ya sea para trabajos por horas o jornadas completas.
         </p>
-        {!user && (
-          <div className="max-w-lg mx-auto mt-8 p-6 bg-white rounded shadow">
-            <h2 className="text-xl font-bold mb-2 text-blue-600">¿Eres empresa?</h2>
-            <p className="mb-4 text-gray-700">Regístrate y accede a nuestro banco de profesionales certificados. Te ayudamos a encontrar el talento que tu empresa necesita.</p>
-            <div className="flex flex-col gap-4">
-              <Link to="/register?tipo=empresa" className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-full transition">Crear cuenta de empresa</Link>
-              <Link to="/login?tipo=empresa" className="bg-gray-200 hover:bg-gray-300 text-blue-600 px-6 py-2 rounded-full transition">Iniciar sesión como empresa</Link>
-            </div>
+        {/* Si la empresa está autenticada mostrar acciones rápidas */}
+        {user && user.rol === "empresa" && (
+          <div className="max-w-3xl mx-auto mt-8 grid gap-6 sm:grid-cols-3">
+            <Link to="/publicar-oferta" className="p-6 rounded-lg border shadow hover:shadow-md transition bg-white">
+              <h3 className="font-semibold mb-2">📢 Publicar Oferta</h3>
+              <p className="text-sm text-gray-600">Crea una nueva vacante y recibe postulaciones.</p>
+            </Link>
+            <Link to="/empresa" className="p-6 rounded-lg border shadow hover:shadow-md transition bg-white">
+              <h3 className="font-semibold mb-2">📋 Mis Postulaciones</h3>
+              <p className="text-sm text-gray-600">Revisa candidatos y gestiona el proceso.</p>
+            </Link>
+            <Link to="/quiero-contratar/trabajadores" className="p-6 rounded-lg border shadow hover:shadow-md transition bg-white">
+              <h3 className="font-semibold mb-2">🔍 Buscar Talento</h3>
+              <p className="text-sm text-gray-600">Filtra perfiles y contacta profesionales.</p>
+            </Link>
+          </div>
+        )}
+        {/* Para usuarios no empresa solo un acceso directo a ver profesionales (sin registro) */}
+        {(!user || user.rol !== "empresa") && (
+          <div className="mt-8">
+            <Link
+              to="/quiero-contratar/trabajadores"
+              className="inline-block bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-full transition shadow"
+            >
+              Ver profesionales disponibles
+            </Link>
           </div>
         )}
       </section>
@@ -37,7 +58,7 @@ export default function QuieroContratar() {
               Contrata profesionales verificados para posiciones permanentes.
             </p>
             <Link
-              to="/quiero-contratar/trabajadores"
+              to="/quiero-contratar/trabajadores?modalidad=tiempo%20completo"
               className="bg-blue-600 text-white px-6 py-2 rounded-full inline-block"
             >
               Ver profesionales
@@ -50,7 +71,7 @@ export default function QuieroContratar() {
               Accede a profesionales para trabajar por horas o proyectos.
             </p>
             <Link
-              to="/quiero-contratar/trabajadores"
+              to="/quiero-contratar/trabajadores?modalidad=fraccional"
               className="bg-blue-600 text-white px-6 py-2 rounded-full inline-block"
             >
               Ver por horas
@@ -85,26 +106,6 @@ export default function QuieroContratar() {
             </p>
           </div>
         </div>
-      </section>
-
-      {/* CTA FINAL */}
-      <section className="py-16 px-4 text-center">
-        <h2 className="text-2xl font-bold mb-4">Crea tu cuenta empresarial</h2>
-        <p className="text-gray-600 mb-6">
-          Comienza a contratar talento de calidad hoy mismo.
-        </p>
-        <Link
-          to="/register"
-          className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-full transition"
-        >
-          Crear cuenta empresarial
-        </Link>
-        <p className="mt-4">
-          ¿Ya tienes cuenta?{" "}
-          <Link to="/login" className="text-blue-600 underline">
-            Inicia sesión
-          </Link>
-        </p>
       </section>
     </main>
   );

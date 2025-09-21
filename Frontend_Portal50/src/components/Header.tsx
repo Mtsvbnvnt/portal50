@@ -185,7 +185,6 @@ export default function Header() {
           ) : (
             <div className="space-x-4">
               <Link to="/login" className="hover:text-blue-600">Iniciar Sesión</Link>
-              <Link to="/register" className="hover:text-blue-600">Regístrate</Link>
             </div>
           )}
         </div>
