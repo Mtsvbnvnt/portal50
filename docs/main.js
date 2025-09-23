@@ -28,7 +28,19 @@ function renderProfessionals(items) {
     node.querySelector('.title').textContent = p.name;
     node.querySelector('.meta').textContent = `${p.areas.join(', ')} · ${p.city}`;
     node.querySelector('.stars').textContent = '★'.repeat(Math.round(p.rating)) + '☆'.repeat(5 - Math.round(p.rating));
-    node.querySelector('[data-action="review"]').addEventListener('click', () => openReviewModal(p.id, p.name));
+    const btnReview = node.querySelector('[data-action="review"]');
+    btnReview.addEventListener('click', () => openReviewModal(p.id, p.name));
+    // Acciones
+    const actions = document.createElement('div');
+    actions.style.marginTop = '8px';
+    const btnVideo = document.createElement('button');
+    btnVideo.className = 'btn'; btnVideo.textContent = 'Ver video';
+    btnVideo.addEventListener('click', ()=>{ location.href = `video.html?professionalId=${encodeURIComponent(p.id)}`; });
+    const btnClass = document.createElement('button');
+    btnClass.className = 'btn'; btnClass.style.marginLeft = '8px'; btnClass.textContent = 'Tomar clase';
+    btnClass.addEventListener('click', ()=>{ location.href = `video.html?professionalId=${encodeURIComponent(p.id)}&cta=pay`; });
+    actions.appendChild(btnVideo); actions.appendChild(btnClass);
+    node.querySelector('.card').appendChild(actions);
     grid.appendChild(node);
   });
 }

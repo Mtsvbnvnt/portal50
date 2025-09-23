@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Video del Profesional</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="hero">
+      <h1 id="pro-name">Profesional</h1>
+      <p id="pro-meta"></p>
+    </header>
+    <main class="container">
+      <section>
+        <div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:12px;box-shadow:0 1px 2px rgba(0,0,0,.06);">
+          <iframe id="pro-video" src="" title="Video de presentación" style="position:absolute;top:0;left:0;width:100%;height:100%;border:0;" allowfullscreen></iframe>
+        </div>
+        <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap;">
+          <button id="btn-pay" class="btn">Tomar clase</button>
+          <a id="btn-back" class="btn" href="index.html" style="background:#555;">Volver</a>
+        </div>
+        <div id="pay-msg" class="msg" style="margin-top:8px;"></div>
+      </section>
+    </main>
+    <script>
+      const API = (window.API_BASE || 'http://localhost:3001') + '/api';
+      const qs = new URLSearchParams(location.search);
+      const professionalId = qs.get('professionalId');
+      const cta = qs.get('cta');
+
+      async function fetchJSON(url, opts){
+        const res = await fetch(url, opts);
+        if(!res.ok) throw new Error('HTTP');
+        return res.json();
+      }
+
+      async function loadProfessional(){
+        const prof = await fetchJSON(`${API}/professionals/${professionalId}`);
+        document.getElementById('pro-name').textContent = prof.name;
+        document.getElementById('pro-meta').textContent = `${(prof.areas||[]).join(', ')} · ${prof.city} · ⭐ ${prof.rating}`;
+        document.getElementById('pro-video').src = prof.videoUrl || '';
+      }
+
+      async function startCheckout(){
+        const btn = document.getElementById('btn-pay');
+        const msg = document.getElementById('pay-msg');
+        btn.disabled = true; msg.textContent = 'Redirigiendo a pasarela de pago...';
+        try{
+          const data = await fetchJSON(`${API}/checkout`, {
+            method:'POST', headers:{'Content-Type':'application/json'},
+            body: JSON.stringify({ professionalId, classes: 1 })
+          });
+          location.href = `schedule.html?bookingId=${encodeURIComponent(data.bookingId)}`;
+        }catch(err){ msg.textContent = 'No se pudo iniciar el pago.'; btn.disabled = false; }
+      }
+
+      document.getElementById('btn-pay').addEventListener('click', startCheckout);
+
+      loadProfessional();
+      if (cta === 'pay') setTimeout(startCheckout, 300);
+    </script>
+  </body>
+</html>

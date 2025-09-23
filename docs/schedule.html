@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Agendar clases</title>
+    <link rel="stylesheet" href="styles.css" />
+    <style>
+      .calendar{ display:grid; grid-template-columns:repeat(auto-fill, minmax(180px,1fr)); gap:12px; }
+      .slot{ padding:10px 12px; border:1px solid #ddd; border-radius:8px; cursor:pointer; background:#fff; }
+      .slot[aria-pressed="true"]{ background:#111; color:#fff; border-color:#111; }
+      .slot[disabled]{ opacity:.5; cursor:not-allowed; }
+      .muted{ color:#666; font-size:14px; }
+    </style>
+  </head>
+  <body>
+    <header class="hero">
+      <h1>Agenda tu clase</h1>
+      <p class="muted">Selecciona los horarios disponibles</p>
+    </header>
+    <main class="container">
+      <section>
+        <div id="calendar" class="calendar"></div>
+        <div style="margin-top:12px; display:flex; gap:8px;">
+          <button id="btn-confirm" class="btn">Confirmar horarios</button>
+          <a class="btn" style="background:#555;" href="index.html">Inicio</a>
+        </div>
+        <div id="sched-msg" class="msg" style="margin-top:8px;"></div>
+      </section>
+    </main>
+    <script>
+      const API = (window.API_BASE || 'http://localhost:3001') + '/api';
+      const qs = new URLSearchParams(location.search);
+      const bookingId = qs.get('bookingId');
+      let booking, availability; let selected = new Set();
+
+      async function fetchJSON(url, opts){ const r = await fetch(url, opts); if(!r.ok) throw new Error('HTTP'); return r.json(); }
+
+      function formatSlot(iso){
+        const d = new Date(iso);
+        return d.toLocaleString(undefined, { weekday:'short', day:'2-digit', month:'short', hour:'2-digit', minute:'2-digit' });
+      }
+
+      function renderCalendar(){
+        const grid = document.getElementById('calendar');
+        grid.innerHTML = '';
+        (availability.slots||[]).forEach(s => {
+          const btn = document.createElement('button');
+          btn.className = 'slot';
+          btn.type = 'button';
+          btn.textContent = formatSlot(s);
+          btn.setAttribute('aria-pressed', selected.has(s) ? 'true' : 'false');
+          btn.addEventListener('click', ()=>{
+            if (selected.has(s)) selected.delete(s); else selected.add(s);
+            btn.setAttribute('aria-pressed', selected.has(s) ? 'true' : 'false');
+          });
+          grid.appendChild(btn);
+        });
+      }
+
+      async function load(){
+        booking = await fetchJSON(`${API}/bookings/${bookingId}`);
+        availability = await fetchJSON(`${API}/professionals/${booking.professionalId}/availability`);
+        renderCalendar();
+      }
+
+      async function confirm(){
+        const msg = document.getElementById('sched-msg');
+        const slots = Array.from(selected);
+        if (slots.length === 0){ msg.textContent = 'Selecciona al menos un horario.'; return; }
+        msg.textContent = 'Guardando...';
+        try{
+          await fetchJSON(`${API}/bookings/${bookingId}`, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ slots }) });
+          msg.textContent = '¡Listo! Tu clase ha sido agendada.';
+        }catch(err){ msg.textContent = 'No se pudo agendar. Intenta nuevamente.'; }
+      }
+
+      document.getElementById('btn-confirm').addEventListener('click', confirm);
+      load();
+    </script>
+  </body>
+  </html>
