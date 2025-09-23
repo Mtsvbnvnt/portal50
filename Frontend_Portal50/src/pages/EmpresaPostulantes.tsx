@@ -9,6 +9,12 @@ export default function EmpresaPostulantes() {
   const [oferta, setOferta] = useState<any>(null);
   const [postulaciones, setPostulaciones] = useState<any[]>([]);
   const [expandedId, setExpandedId] = useState<string | null>(null);
+  const [showEntrevista, setShowEntrevista] = useState<string | null>(null);
+  const [showNota, setShowNota] = useState<string | null>(null);
+  const [notas, setNotas] = useState<{[key:string]: string[]}>({});
+  const [entrevistas, setEntrevistas] = useState<{[key:string]: string[]}>({});
+  const [inputNota, setInputNota] = useState("");
+  const [inputEntrevista, setInputEntrevista] = useState("");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -140,7 +146,7 @@ export default function EmpresaPostulantes() {
                   </div>
                 )}
 
-                <div className="flex gap-2 mt-2">
+                <div className="flex gap-2 mt-2 flex-wrap">
                   <button
                     onClick={() => handleUpdateEstado(p._id, "preseleccionado")}
                     className="bg-green-600 text-white px-4 py-2 rounded"
@@ -153,7 +159,106 @@ export default function EmpresaPostulantes() {
                   >
                     Rechazar
                   </button>
+                  <button
+                    onClick={() => setShowEntrevista(p._id)}
+                    className="bg-blue-600 text-white px-4 py-2 rounded"
+                  >
+                    Agendar entrevista
+                  </button>
+                  <button
+                    onClick={() => setShowNota(p._id)}
+                    className="bg-yellow-500 text-white px-4 py-2 rounded"
+                  >
+                    Agregar nota al perfil
+                  </button>
                 </div>
+                {/* Mostrar entrevistas y notas */}
+                {entrevistas[p._id]?.length > 0 && (
+                  <div className="mt-2">
+                    <strong>Entrevistas:</strong>
+                    <ul className="list-disc pl-6">
+                      {entrevistas[p._id].map((e, i) => (
+                        <li key={i}>{e}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+                {notas[p._id]?.length > 0 && (
+                  <div className="mt-2">
+                    <strong>Notas:</strong>
+                    <ul className="list-disc pl-6">
+                      {notas[p._id].map((n, i) => (
+                        <li key={i}>{n}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+                {/* Modal entrevista */}
+                {showEntrevista === p._id && (
+                  <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
+                    <div className="bg-white p-6 rounded shadow max-w-md w-full">
+                      <h3 className="font-bold mb-2">Agendar entrevista</h3>
+                      <textarea
+                        className="w-full border rounded p-2 mb-2"
+                        rows={3}
+                        placeholder="Detalles de la entrevista (fecha, hora, link, etc)"
+                        value={inputEntrevista}
+                        onChange={e => setInputEntrevista(e.target.value)}
+                      />
+                      <div className="flex gap-2 justify-end">
+                        <button
+                          className="bg-gray-300 px-3 py-1 rounded"
+                          onClick={() => { setShowEntrevista(null); setInputEntrevista(""); }}
+                        >Cancelar</button>
+                        <button
+                          className="bg-blue-600 text-white px-3 py-1 rounded"
+                          onClick={() => {
+                            setEntrevistas(prev => ({
+                              ...prev,
+                              [p._id]: [...(prev[p._id] || []), inputEntrevista]
+                            }));
+                            setShowEntrevista(null);
+                            setInputEntrevista("");
+                          }}
+                          disabled={!inputEntrevista.trim()}
+                        >Guardar</button>
+                      </div>
+                    </div>
+                  </div>
+                )}
+                {/* Modal nota */}
+                {showNota === p._id && (
+                  <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
+                    <div className="bg-white p-6 rounded shadow max-w-md w-full">
+                      <h3 className="font-bold mb-2">Agregar nota al perfil</h3>
+                      <textarea
+                        className="w-full border rounded p-2 mb-2"
+                        rows={3}
+                        placeholder="Escribe una nota sobre este postulante"
+                        value={inputNota}
+                        onChange={e => setInputNota(e.target.value)}
+                      />
+                      <div className="flex gap-2 justify-end">
+                        <button
+                          className="bg-gray-300 px-3 py-1 rounded"
+                          onClick={() => { setShowNota(null); setInputNota(""); }}
+                        >Cancelar</button>
+                        <button
+                          className="bg-yellow-500 text-white px-3 py-1 rounded"
+                          onClick={() => {
+                            setNotas(prev => ({
+                              ...prev,
+                              [p._id]: [...(prev[p._id] || []), inputNota]
+                            }));
+                            setShowNota(null);
+                            setInputNota("");
+                          }}
+                          disabled={!inputNota.trim()}
+                        >Guardar</button>
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
             )}
           </div>

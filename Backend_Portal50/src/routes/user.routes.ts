@@ -1,4 +1,7 @@
+
 import { Router } from 'express';
+// import eliminado, ya que está más abajo
+
 import { uploadUsuario, uploadCV } from '../middlewares/upload.middleware';
 import {
   getUser,
@@ -13,7 +16,13 @@ import {
 import { verifyFirebaseAuth } from '../middlewares/auth.middleware';
 import path from 'path';
 
+import { crearAdminFraccional } from '../controllers/adminfraccional.controller';
+
+
 const router = Router();
+
+// Crear usuario admin-fraccional (solo para uso interno/admin)
+router.post('/adminfraccional', crearAdminFraccional);
 
 /**
  * @swagger

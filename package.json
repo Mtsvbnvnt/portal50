@@ -2,5 +2,9 @@
   "dependencies": {
     "docker": "^1.0.0",
     "jspdf": "^3.0.2"
+  },
+  "devDependencies": {
+    "@types/nodemailer": "^7.0.1",
+    "typescript": "^5.9.2"
   }
 }

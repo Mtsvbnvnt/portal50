@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import Home from "./pages/Home";
+import AdminFraccional from "./pages/AdminFraccional";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import Register from "./pages/Register";
@@ -52,6 +53,7 @@ export default function App() {
             <Route path="/aprender" element={<Aprender />} />
             <Route path="/subir-curso" element={<SubirCurso />} />
             <Route path="/aprender/curso/:id" element={<CursoDetalle />} />
+            <Route path="/admin-fraccional" element={<AdminFraccional />} />
           </Routes>
         </main>
         <Footer />

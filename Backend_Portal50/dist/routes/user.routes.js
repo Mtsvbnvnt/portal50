@@ -4,11 +4,15 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
+// import eliminado, ya que está más abajo
 const upload_middleware_1 = require("../middlewares/upload.middleware");
 const user_controller_1 = require("../controllers/user.controller");
 const auth_middleware_1 = require("../middlewares/auth.middleware");
 const path_1 = __importDefault(require("path"));
+const adminfraccional_controller_1 = require("../controllers/adminfraccional.controller");
 const router = (0, express_1.Router)();
+// Crear usuario admin-fraccional (solo para uso interno/admin)
+router.post('/adminfraccional', adminfraccional_controller_1.crearAdminFraccional);
 /**
  * @swagger
  * /api/users/uid/{uid}:
