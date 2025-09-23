@@ -1,5 +1,8 @@
 "use strict";
 // src/controllers/empresa.controller.ts
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.updateEmpresa = exports.uploadEmpresaFotoPerfil = exports.getProfesionalesActivos = exports.getEmpresaById = exports.getEmpresasActivas = exports.desactivarEmpresa = exports.updateEjecutivo = exports.addEjecutivo = exports.getEmpresaByUid = exports.createEmpresa = void 0;
 const empresa_model_1 = require("../models/empresa.model");
@@ -135,13 +138,39 @@ const getEmpresasActivas = async (_req, res) => {
 };
 exports.getEmpresasActivas = getEmpresasActivas;
 //Obtener empresa por _id (para vista pública de ofertas)
+const job_model_1 = require("../models/job.model");
+const postulacion_model_1 = __importDefault(require("../models/postulacion.model"));
 const getEmpresaById = async (req, res) => {
     try {
-        const empresa = await empresa_model_1.Empresa.findById(req.params.empresaId).select("nombre fotoPerfil");
+        const empresa = await empresa_model_1.Empresa.findById(req.params.empresaId)
+            .populate('ejecutivos', 'nombre email rol telefono uid');
         if (!empresa) {
             return res.status(404).json({ message: "Empresa no encontrada" });
         }
-        res.status(200).json(empresa);
+        // Buscar ofertas de la empresa
+        const ofertas = await job_model_1.Job.find({ empresaId: empresa._id });
+        // Para cada oferta, buscar postulaciones y agregarlas
+        const ofertasConPostulantes = await Promise.all(ofertas.map(async (oferta) => {
+            const postulaciones = await postulacion_model_1.default.find({ ofertaId: oferta._id })
+                .populate('usuarioId', 'nombre email telefono');
+            return {
+                ...oferta.toObject(),
+                postulantes: postulaciones.map(post => {
+                    const usuario = post.usuarioId;
+                    return {
+                        _id: usuario._id,
+                        nombre: usuario.nombre,
+                        email: usuario.email,
+                        telefono: usuario.telefono,
+                        estado: post.estado
+                    };
+                })
+            };
+        }));
+        res.status(200).json({
+            ...empresa.toObject(),
+            ofertas: ofertasConPostulantes
+        });
     }
     catch (err) {
         console.error("❌ Error obteniendo empresa por ID:", err);

@@ -160,13 +160,45 @@ export const getEmpresasActivas = async (_req: Request, res: Response) => {
 };
 
 //Obtener empresa por _id (para vista pública de ofertas)
+import { Job } from '../models/job.model';
+import Postulacion from '../models/postulacion.model';
+
 export const getEmpresaById = async (req: Request, res: Response) => {
   try {
-    const empresa = await Empresa.findById(req.params.empresaId).select("nombre fotoPerfil");
+    const empresa = await Empresa.findById(req.params.empresaId)
+      .populate('ejecutivos', 'nombre email rol telefono uid');
     if (!empresa) {
       return res.status(404).json({ message: "Empresa no encontrada" });
     }
-    res.status(200).json(empresa);
+
+    // Buscar ofertas de la empresa
+    const ofertas = await Job.find({ empresaId: empresa._id });
+
+    // Para cada oferta, buscar postulaciones y agregarlas
+    const ofertasConPostulantes = await Promise.all(
+      ofertas.map(async (oferta) => {
+        const postulaciones = await Postulacion.find({ ofertaId: oferta._id })
+          .populate('usuarioId', 'nombre email telefono');
+        return {
+          ...oferta.toObject(),
+          postulantes: postulaciones.map(post => {
+            const usuario: any = post.usuarioId as any;
+            return {
+              _id: usuario._id,
+              nombre: usuario.nombre,
+              email: usuario.email,
+              telefono: usuario.telefono,
+              estado: post.estado
+            };
+          })
+        };
+      })
+    );
+
+    res.status(200).json({
+      ...empresa.toObject(),
+      ofertas: ofertasConPostulantes
+    });
   } catch (err) {
     console.error("❌ Error obteniendo empresa por ID:", err);
     res.status(500).json({ message: "Error obteniendo empresa" });
