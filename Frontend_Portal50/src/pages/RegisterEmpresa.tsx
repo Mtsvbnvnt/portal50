@@ -7,7 +7,9 @@ export default function RegisterEmpresa() {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [pass, setPass] = useState("");
+  const [repeatPass, setRepeatPass] = useState("");
   const [nombre, setNombre] = useState("");
+  const [apellido, setApellido] = useState("");
   const [telefono, setTelefono] = useState("");
   const [pais, setPais] = useState("");
   const [error, setError] = useState("");
@@ -18,7 +20,7 @@ export default function RegisterEmpresa() {
     setError("");
     setSuccess(false);
 
-    if (!email || !pass || !nombre) {
+    if (!email || !pass || !repeatPass || !nombre || !apellido || !telefono || !pais) {
       setError("Por favor completa todos los campos obligatorios.");
       return;
     }
@@ -28,6 +30,10 @@ export default function RegisterEmpresa() {
     }
     if (pass.length < 6) {
       setError("La contraseña debe tener mínimo 6 caracteres.");
+      return;
+    }
+    if (pass !== repeatPass) {
+      setError("Las contraseñas no coinciden.");
       return;
     }
     try {
@@ -43,7 +49,7 @@ export default function RegisterEmpresa() {
         body: JSON.stringify({
           uid: user.uid,
           email,
-          nombre,
+          nombre: nombre + " " + apellido,
           telefono,
           rol: "empresa",
           direccion: pais,
@@ -69,11 +75,48 @@ export default function RegisterEmpresa() {
       >
         <h1 className="text-2xl font-bold mb-4">Registro de Empresa</h1>
         <input
+          placeholder="Nombre *"
+          value={nombre}
+          onChange={(e) => setNombre(e.target.value)}
+          className="input mb-4"
+        />
+        <input
+          placeholder="Apellido *"
+          value={apellido}
+          onChange={(e) => setApellido(e.target.value)}
+          className="input mb-4"
+        />
+        <input
           placeholder="Email *"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           className="input mb-4"
         />
+        <input
+          placeholder="Teléfono *"
+          value={telefono}
+          onChange={(e) => setTelefono(e.target.value)}
+          className="input mb-4"
+        />
+        <select
+          value={pais}
+          onChange={(e) => setPais(e.target.value)}
+          className="input mb-4"
+        >
+          <option value="">Selecciona tu país *</option>
+          <option value="Chile">Chile</option>
+          <option value="Argentina">Argentina</option>
+          <option value="Bolivia">Bolivia</option>
+          <option value="Brasil">Brasil</option>
+          <option value="Colombia">Colombia</option>
+          <option value="Ecuador">Ecuador</option>
+          <option value="México">México</option>
+          <option value="Paraguay">Paraguay</option>
+          <option value="Perú">Perú</option>
+          <option value="Uruguay">Uruguay</option>
+          <option value="Venezuela">Venezuela</option>
+          <option value="Otro">Otro</option>
+        </select>
         <input
           placeholder="Contraseña *"
           type="password"
@@ -82,21 +125,10 @@ export default function RegisterEmpresa() {
           className="input mb-4"
         />
         <input
-          placeholder="Nombre de la empresa *"
-          value={nombre}
-          onChange={(e) => setNombre(e.target.value)}
-          className="input mb-4"
-        />
-        <input
-          placeholder="Teléfono"
-          value={telefono}
-          onChange={(e) => setTelefono(e.target.value)}
-          className="input mb-4"
-        />
-        <input
-          placeholder="País"
-          value={pais}
-          onChange={(e) => setPais(e.target.value)}
+          placeholder="Repetir contraseña *"
+          type="password"
+          value={repeatPass}
+          onChange={(e) => setRepeatPass(e.target.value)}
           className="input mb-4"
         />
         <button

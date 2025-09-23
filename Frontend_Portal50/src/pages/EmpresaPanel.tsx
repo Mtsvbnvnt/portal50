@@ -178,12 +178,25 @@ export default function EmpresaPanel() {
               <div>
                 <p className="font-bold">{ej.nombre}</p>
                 <p className="text-sm text-gray-600">{ej.email}</p>
-                <p className="text-sm text-gray-600">Telefono: {ej.telefono || "Sin teléfono registrado"}</p>
+                <p className="text-sm text-gray-600">Teléfono: {ej.telefono || "Sin teléfono registrado"}</p>
               </div>
-              <div className="space-x-2">
-                <button className="px-3 py-1 bg-gray-800 text-white text-sm rounded">
-                  Enviar Email
-                </button>
+              <div className="space-x-2 flex items-center">
+                <a
+                  href={`mailto:${ej.email}`}
+                  className="px-3 py-1 bg-blue-700 text-white text-sm rounded hover:bg-blue-800"
+                  title="Enviar correo"
+                >
+                  Email
+                </a>
+                <a
+                  href={ej.telefono ? `https://wa.me/${ej.telefono.replace(/[^\d]/g, "")}` : '#'}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`px-3 py-1 bg-green-600 text-white text-sm rounded hover:bg-green-700 ${ej.telefono ? '' : 'opacity-50 pointer-events-none'}`}
+                  title="Enviar WhatsApp"
+                >
+                  WhatsApp
+                </a>
                 <button
                   className="px-3 py-1 bg-red-600 text-white text-sm rounded"
                   onClick={() => handleEliminarEjecutivo(ej.uid)}

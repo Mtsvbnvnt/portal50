@@ -118,9 +118,28 @@ export default function Header() {
         {/* CENTRO */}
         <nav className="flex-1 flex flex-wrap justify-center space-x-2 md:space-x-6 text-base md:text-lg">
           <Link to="/" className="hover:text-blue-600">Inicio</Link>
-          <Link to="/quiero-contratar" className="hover:text-blue-600">Quiero Contratar</Link>
-          <Link to="/trabajar" className="hover:text-blue-600">Quiero Trabajar</Link>
-          <Link to="/aprender" className="hover:text-blue-600">Quiero Aprender</Link>
+          {/* Empresa: Quiero contratar y Quiero aprender */}
+          {user?.rol === "empresa" && (
+            <>
+              <Link to="/quiero-contratar" className="hover:text-blue-600">Quiero Contratar</Link>
+              <Link to="/aprender" className="hover:text-blue-600">Quiero Aprender</Link>
+            </>
+          )}
+          {/* Trabajador: Quiero trabajar y Quiero aprender */}
+          {(user?.rol === "profesional" || user?.rol === "profesional-ejecutivo") && (
+            <>
+              <Link to="/trabajar" className="hover:text-blue-600">Quiero Trabajar</Link>
+              <Link to="/aprender" className="hover:text-blue-600">Quiero Aprender</Link>
+            </>
+          )}
+          {/* Invitado: muestra ambos */}
+          {!user && (
+            <>
+              <Link to="/quiero-contratar" className="hover:text-blue-600">Quiero Contratar</Link>
+              <Link to="/trabajar" className="hover:text-blue-600">Quiero Trabajar</Link>
+              <Link to="/aprender" className="hover:text-blue-600">Quiero Aprender</Link>
+            </>
+          )}
         </nav>
 
         {/* DERECHA */}
