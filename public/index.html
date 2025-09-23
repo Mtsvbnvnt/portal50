@@ -38,6 +38,21 @@
         <h2>Profesionales</h2>
         <div id="professionals" class="grid"></div>
       </section>
+      <hr />
+      <section>
+        <h2>Registro rápido</h2>
+        <form id="form-register" class="register">
+          <input type="text" id="reg-name" placeholder="Nombre" required />
+          <input type="email" id="reg-email" placeholder="Email" required />
+          <select id="reg-role" required>
+            <option value="aprendiz">Aprendiz</option>
+            <option value="empresa">Empresa</option>
+            <option value="trabajador">Trabajador</option>
+          </select>
+          <button class="btn" type="submit">Registrarme</button>
+          <span id="reg-msg" class="msg"></span>
+        </form>
+      </section>
     </main>
 
     <template id="card-course">
@@ -54,9 +69,39 @@
         <h3 class="title"></h3>
         <p class="meta"></p>
         <div class="stars"></div>
-        <button class="btn">Ver perfil</button>
+        <button class="btn" data-action="review">Dejar reseña</button>
       </article>
     </template>
+
+    <div id="modal" class="modal hidden" aria-hidden="true">
+      <div class="modal-backdrop" data-action="close"></div>
+      <div class="modal-content" role="dialog" aria-modal="true">
+        <h3>Dejar reseña</h3>
+        <form id="form-review">
+          <input type="hidden" id="rev-prof-id" />
+          <label>Tu nombre
+            <input type="text" id="rev-user" placeholder="Tu nombre" required />
+          </label>
+          <label>Estrellas
+            <select id="rev-stars">
+              <option value="5">★★★★★ (5)</option>
+              <option value="4">★★★★☆ (4)</option>
+              <option value="3">★★★☆☆ (3)</option>
+              <option value="2">★★☆☆☆ (2)</option>
+              <option value="1">★☆☆☆☆ (1)</option>
+            </select>
+          </label>
+          <label>Comentario
+            <textarea id="rev-comment" rows="3" placeholder="¿Cómo fue tu experiencia?"></textarea>
+          </label>
+          <div class="modal-actions">
+            <button type="button" class="btn btn-secondary" data-action="close">Cancelar</button>
+            <button type="submit" class="btn">Enviar reseña</button>
+          </div>
+          <div id="rev-msg" class="msg"></div>
+        </form>
+      </div>
+    </div>
 
     <script src="main.js"></script>
   </body>

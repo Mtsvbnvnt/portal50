@@ -49,6 +49,9 @@ const courses = [
   { id: nanoid(), title: 'Figma para principiantes', area: 'Diseño UX/UI', featured: false, professionalId: professionals[2].id }
 ];
 
+// Registro simple en memoria
+const users = [];
+
 // Endpoints
 app.get('/api/courses', (req, res) => {
   const { q, area } = req.query;
@@ -91,6 +94,17 @@ app.post('/api/professionals/:id/reviews', (req, res) => {
   const sum = prof.reviews.reduce((acc, r) => acc + Number(r.stars || 0), 0);
   prof.rating = Number((sum / prof.reviews.length).toFixed(2));
   res.status(201).json(review);
+});
+
+app.post('/api/register', (req, res) => {
+  const { name, email, role } = req.body || {};
+  const allowed = ['aprendiz', 'empresa', 'trabajador'];
+  if (!name || !email || !role || !allowed.includes(String(role).toLowerCase())) {
+    return res.status(400).json({ error: 'Datos inválidos. name, email, role(aprendiz|empresa|trabajador)' });
+  }
+  const user = { id: nanoid(), name, email, role: String(role).toLowerCase(), createdAt: new Date().toISOString() };
+  users.push(user);
+  res.status(201).json(user);
 });
 
 app.listen(PORT, () => {

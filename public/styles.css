@@ -15,5 +15,17 @@ h2{ margin:16px 0; }
 .card .meta{ margin:0 0 8px 0; color:#444; font-size:14px; }
 .card .btn{ display:inline-block; margin-top:8px; background:#111; color:#fff; border:0; padding:8px 12px; border-radius:8px; cursor:pointer; }
 .stars{ color:#f59e0b; font-size:18px; }
+.register{ display:flex; gap:8px; flex-wrap:wrap; align-items:center; }
+.register input,.register select{ padding:10px 12px; border-radius:8px; border:1px solid #ddd; }
+.register .msg{ margin-left:8px; font-size:14px; color:#155724; }
+.modal.hidden{ display:none; }
+.modal{ position:fixed; inset:0; display:grid; place-items:center; }
+.modal-backdrop{ position:absolute; inset:0; background:rgba(0,0,0,.5); }
+.modal-content{ position:relative; background:#fff; padding:16px; border-radius:12px; width:min(520px, 92vw); box-shadow:0 10px 30px rgba(0,0,0,.2); }
+.modal-content h3{ margin-top:0; }
+.modal-content label{ display:block; margin:8px 0; }
+.modal-content input,.modal-content select,.modal-content textarea{ width:100%; padding:10px 12px; border:1px solid #ddd; border-radius:8px; }
+.modal-actions{ display:flex; gap:8px; justify-content:flex-end; margin-top:8px; }
+.btn-secondary{ background:#e5e7eb !important; color:#111 !important; }
 
 
