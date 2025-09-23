@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Quiero Aprender</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="hero">
+      <h1>Quiero Aprender</h1>
+      <p>Encuentra cursos cortos y profesionales certificados en diferentes áreas.</p>
+      <div class="search-bar">
+        <input id="search" type="search" placeholder="Buscar cursos o profesionales..." />
+        <select id="filter-area">
+          <option value="">Todas las áreas</option>
+          <option>Marketing Digital</option>
+          <option>Programación</option>
+          <option>Diseño UX/UI</option>
+        </select>
+        <select id="filter-city">
+          <option value="">Todas las ciudades</option>
+          <option>Buenos Aires</option>
+          <option>CDMX</option>
+          <option>Lima</option>
+        </select>
+        <button id="btn-search">Buscar</button>
+      </div>
+    </header>
+
+    <main class="container">
+      <section>
+        <h2>Cursos destacados</h2>
+        <div id="courses" class="grid"></div>
+      </section>
+      <hr />
+      <section>
+        <h2>Profesionales</h2>
+        <div id="professionals" class="grid"></div>
+      </section>
+    </main>
+
+    <template id="card-course">
+      <article class="card">
+        <h3 class="title"></h3>
+        <p class="meta"></p>
+        <p class="pro"></p>
+        <button class="btn">Solicitar clase</button>
+      </article>
+    </template>
+
+    <template id="card-professional">
+      <article class="card">
+        <h3 class="title"></h3>
+        <p class="meta"></p>
+        <div class="stars"></div>
+        <button class="btn">Ver perfil</button>
+      </article>
+    </template>
+
+    <script src="main.js"></script>
+  </body>
+  </html>
+
+
