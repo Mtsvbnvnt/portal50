@@ -1,1 +1,17 @@
+<<<<<<< HEAD
 node_modules
+=======
+# Dependencias
+server/node_modules/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Sistema
+.DS_Store
+Thumbs.db
+
+
+>>>>>>> 36cb953cba3c623f697bfa63562a8d98262ec0d0

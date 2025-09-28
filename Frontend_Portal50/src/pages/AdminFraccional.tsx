@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../firebase";
 
@@ -20,6 +21,7 @@ const AdminFraccional: React.FC = () => {
   const [empLoading, setEmpLoading] = useState(false);
   const [empError, setEmpError] = useState("");
 
+  const navigate = useNavigate();
   React.useEffect(() => {
     if (isLogged) {
       setEmpLoading(true);
@@ -171,7 +173,11 @@ const AdminFraccional: React.FC = () => {
           <p className="text-gray-500">No hay empresas activas.</p>
         ) : (
           empresas.map((empresa) => (
-            <div key={empresa._id} className="bg-white rounded shadow p-4 mb-6">
+            <div
+              key={empresa._id}
+              className="bg-white rounded shadow p-4 mb-6 cursor-pointer hover:bg-blue-50 transition"
+              onClick={() => navigate(`/admin-fraccional/empresa/${empresa._id}`)}
+            >
               <div className="flex justify-between items-center mb-2">
                 <div>
                   <h3 className="font-bold text-lg">{empresa.nombre}</h3>
@@ -179,7 +185,12 @@ const AdminFraccional: React.FC = () => {
                   <p className="text-sm text-gray-600">Teléfono: {empresa.telefono}</p>
                 </div>
                 {/* Aquí irá el botón para asignar ejecutivo */}
-                <button className="bg-green-600 text-white px-4 py-2 rounded font-semibold">Asignar ejecutivo</button>
+                <button
+                  className="bg-green-600 text-white px-4 py-2 rounded font-semibold"
+                  onClick={e => { e.stopPropagation(); /* lógica de asignar ejecutivo */ }}
+                >
+                  Asignar ejecutivo
+                </button>
               </div>
               <div>
                 <strong>Ejecutivos:</strong>

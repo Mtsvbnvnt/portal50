@@ -4,6 +4,7 @@ import Header from "./components/Header";
 import Footer from "./components/Footer";
 import Home from "./pages/Home";
 import AdminFraccional from "./pages/AdminFraccional";
+import EmpresaDetalle from "./pages/EmpresaDetalle";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import Register from "./pages/Register";
@@ -54,6 +55,7 @@ export default function App() {
             <Route path="/subir-curso" element={<SubirCurso />} />
             <Route path="/aprender/curso/:id" element={<CursoDetalle />} />
             <Route path="/admin-fraccional" element={<AdminFraccional />} />
+            <Route path="/admin-fraccional/empresa/:empresaId" element={<EmpresaDetalle />} />
           </Routes>
         </main>
         <Footer />

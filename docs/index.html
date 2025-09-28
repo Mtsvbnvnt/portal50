@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Quiero Aprender</title>
+    <link rel="stylesheet" href="styles.css" />
+    <script>
+      // Permite configurar la API con ?api=https://tu-api
+      const apiFromQuery = new URLSearchParams(location.search).get('api');
+      window.API_BASE = apiFromQuery || window.API_BASE || 'http://localhost:3001';
+    </script>
+  </head>
+  <body>
+    <header class="hero">
+      <h1>Quiero Aprender</h1>
+      <p>Encuentra cursos cortos y profesionales certificados en diferentes áreas.</p>
+      <div class="search-bar">
+        <input id="search" type="search" placeholder="Buscar cursos o profesionales..." />
+        <select id="filter-area">
+          <option value="">Todas las áreas</option>
+          <option>Marketing Digital</option>
+          <option>Programación</option>
+          <option>Diseño UX/UI</option>
+        </select>
+        <select id="filter-city">
+          <option value="">Todas las ciudades</option>
+          <option>Buenos Aires</option>
+          <option>CDMX</option>
+          <option>Lima</option>
+        </select>
+        <button id="btn-search">Buscar</button>
+      </div>
+    </header>
+
+    <main class="container">
+      <section class="intro">
+        <p>
+          Esta es un área de cursos cortos donde entidades o personas podrán solicitar clases con nuestros profesionales certificados en diferentes áreas.
+        </p>
+        <ul>
+          <li>Una persona puede registrarse en Quiero Aprender sin ser “Empresa” o “Trabajador”.</li>
+          <li>Los perfiles Empresa y Trabajador dan acceso a esta área.</li>
+          <li>Hay cursos destacados y una caja de búsqueda para encontrar profesionales por área o ciudad.</li>
+          <li>Los profesionales reciben evaluaciones (estrellitas) y comentarios.</li>
+        </ul>
+      </section>
+      <section>
+        <h2>Cursos destacados</h2>
+        <div id="courses" class="grid"></div>
+      </section>
+      <hr />
+      <section>
+        <h2>Profesionales</h2>
+        <div id="professionals" class="grid"></div>
+      </section>
+      <hr />
+      <section>
+        <h2>Registro rápido</h2>
+        <form id="form-register" class="register">
+          <input type="text" id="reg-name" placeholder="Nombre" required />
+          <input type="email" id="reg-email" placeholder="Email" required />
+          <select id="reg-role" required>
+            <option value="aprendiz">Aprendiz</option>
+            <option value="empresa">Empresa</option>
+            <option value="trabajador">Trabajador</option>
+          </select>
+          <button class="btn" type="submit">Registrarme</button>
+          <span id="reg-msg" class="msg"></span>
+        </form>
+      </section>
+    </main>
+
+    <template id="card-course">
+      <article class="card">
+        <h3 class="title"></h3>
+        <p class="meta"></p>
+        <p class="pro"></p>
+        <button class="btn">Solicitar clase</button>
+      </article>
+    </template>
+
+    <template id="card-professional">
+      <article class="card">
+        <h3 class="title"></h3>
+        <p class="meta"></p>
+        <div class="stars"></div>
+        <button class="btn" data-action="review">Dejar reseña</button>
+      </article>
+    </template>
+
+    <div id="modal" class="modal hidden" aria-hidden="true">
+      <div class="modal-backdrop" data-action="close"></div>
+      <div class="modal-content" role="dialog" aria-modal="true">
+        <h3>Dejar reseña</h3>
+        <form id="form-review">
+          <input type="hidden" id="rev-prof-id" />
+          <label>Tu nombre
+            <input type="text" id="rev-user" placeholder="Tu nombre" required />
+          </label>
+          <label>Estrellas
+            <select id="rev-stars">
+              <option value="5">★★★★★ (5)</option>
+              <option value="4">★★★★☆ (4)</option>
+              <option value="3">★★★☆☆ (3)</option>
+              <option value="2">★★☆☆☆ (2)</option>
+              <option value="1">★☆☆☆☆ (1)</option>
+            </select>
+          </label>
+          <label>Comentario
+            <textarea id="rev-comment" rows="3" placeholder="¿Cómo fue tu experiencia?"></textarea>
+          </label>
+          <div class="modal-actions">
+            <button type="button" class="btn btn-secondary" data-action="close">Cancelar</button>
+            <button type="submit" class="btn">Enviar reseña</button>
+          </div>
+          <div id="rev-msg" class="msg"></div>
+        </form>
+      </div>
+    </div>
+
+    <script src="main.js"></script>
+  </body>
+  </html>
+
+
