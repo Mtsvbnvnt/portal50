@@ -7,7 +7,6 @@ import AdminFraccional from "./pages/AdminFraccional";
 import EmpresaDetalle from "./pages/EmpresaDetalle";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
-import Register from "./pages/Register";
 import RegisterSelector from "./pages/RegisterSelector";
 import RegisterEmpresa from "./pages/RegisterEmpresa";
 import RegisterUsuario from "./pages/RegisterUsuario";
