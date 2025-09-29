@@ -1,7 +1,17 @@
 {
   "buildCommand": "cd Frontend_Portal50 && npm install && npm run build",
   "outputDirectory": "Frontend_Portal50/dist",
+  "cleanUrls": true,
+  "trailingSlash": false,
   "routes": [
+    {
+      "src": "/assets/(.*)",
+      "dest": "/assets/$1"
+    },
+    {
+      "src": "/(.*\\.(js|css|png|jpg|jpeg|gif|svg|ico|woff|woff2|ttf|eot))",
+      "dest": "/$1"
+    },
     {
       "src": "/(.*)",
       "dest": "/index.html"
