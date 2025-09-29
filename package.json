@@ -1,19 +1,13 @@
 {
-  "name": "quiero-aprender",
+  "name": "portal50",
   "version": "1.0.0",
   "private": true,
-  "type": "module",
   "scripts": {
-    "start": "node server/index.js"
+    "build": "cd Frontend_Portal50 && npm ci && npm run build",
+    "dev": "cd Frontend_Portal50 && npm run dev",
+    "start": "cd Frontend_Portal50 && npm run preview"
   },
-  "dependencies": {
-    "cors": "^2.8.5",
-    "express": "^4.19.2",
-    "docker": "^1.0.0",
-    "jspdf": "^3.0.2"
-  },
-  "devDependencies": {
-    "@types/nodemailer": "^7.0.1",
-    "typescript": "^5.9.2"
-  }
+  "workspaces": [
+    "Frontend_Portal50"
+  ]
 }

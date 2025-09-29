@@ -1,0 +1,10 @@
+# Ignorar todo excepto el frontend
+Backend_Portal50/
+old_static_site/
+server/
+mongo-backup/
+.git/
+node_modules/
+*.log
+.env
+.env.*
