@@ -12,7 +12,7 @@ export default function PublicarOferta() {
   const [ubicacion, setUbicacion] = useState("");
   const [salario, setSalario] = useState("");
   const [etiquetas, setEtiquetas] = useState("");
-  const [estado, setEstado] = useState("borrador");
+  const [estado] = useState("borrador");
   const [status, setStatus] = useState("");
 
   // NUEVO: preguntas dinámicas

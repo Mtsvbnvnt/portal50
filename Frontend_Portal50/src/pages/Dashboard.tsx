@@ -15,6 +15,9 @@ interface User {
   fotoPerfil?: string;
   disponibilidad?: "disponible" | "con condiciones" | "no disponible";
   rol?: string;
+  educaciones?: { institucion: string; titulo: string; desde: string; hasta: string }[];
+  experiencias?: { empresa: string; cargo: string; desde: string; hasta: string }[];
+  habilidades?: string[];
 }
 
 export default function Dashboard() {
