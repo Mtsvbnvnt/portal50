@@ -1,4 +1,5 @@
 import { createContext, useState, useEffect } from "react";
+import { getApiUrl } from "../config/api";
 
 export interface User {
   _id: string;
@@ -35,7 +36,7 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
     if (stored) {
       const parsed = JSON.parse(stored);
       if (parsed.fotoPerfil && !parsed.fotoPerfil.startsWith("http")) {
-        parsed.fotoPerfil = `http://localhost:3000${parsed.fotoPerfil}`;
+        parsed.fotoPerfil = getApiUrl(parsed.fotoPerfil);
       }
       setUser(parsed);
     }

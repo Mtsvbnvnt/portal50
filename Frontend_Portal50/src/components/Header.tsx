@@ -3,7 +3,8 @@ import { useEffect, useState, useContext } from "react";
 import { auth } from "../firebase";
 import { LiaChartPieSolid, LiaCogSolid, LiaTimesSolid } from "react-icons/lia";
 import { FaUserCircle } from "react-icons/fa";
-  import { UserContext } from "../context/UserContext";
+import { UserContext } from "../context/UserContext";
+import { getApiUrl } from "../config/api";
 
 export default function Header() {
   const navigate = useNavigate();
@@ -16,7 +17,7 @@ export default function Header() {
       if (firebaseUser) {
         const idToken = await firebaseUser.getIdToken();
 
-        let res = await fetch(`http://localhost:3000/api/users/uid/${firebaseUser.uid}`, {
+        let res = await fetch(getApiUrl(`/api/users/uid/${firebaseUser.uid}`), {
           headers: { Authorization: `Bearer ${idToken}` },
         });
 
@@ -24,7 +25,7 @@ export default function Header() {
         if (res.ok) {
           data = await res.json();
         } else {
-          res = await fetch(`http://localhost:3000/api/empresas/uid/${firebaseUser.uid}`, {
+          res = await fetch(getApiUrl(`/api/empresas/uid/${firebaseUser.uid}`), {
             headers: { Authorization: `Bearer ${idToken}` },
           });
           if (res.ok) {
@@ -36,7 +37,7 @@ export default function Header() {
         if (data) {
           const fotoPerfil = data.fotoPerfil?.startsWith("http")
             ? data.fotoPerfil
-            : `http://localhost:3000${data.fotoPerfil}`;
+            : getApiUrl(data.fotoPerfil || '');
 
           const finalUser = {
             ...data,
@@ -47,7 +48,7 @@ export default function Header() {
           localStorage.setItem("user", JSON.stringify(finalUser));
 
           if (data.rol === "profesional") {
-            const empresasRes = await fetch(`http://localhost:3000/api/empresas/activas`, {
+            const empresasRes = await fetch(getApiUrl('/api/empresas/activas'), {
               headers: { Authorization: `Bearer ${idToken}` },
             });
             if (empresasRes.ok) {
