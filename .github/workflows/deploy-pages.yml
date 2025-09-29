@@ -1,9 +1,11 @@
-# Simple workflow for deploying static content to GitHub Pages
-name: Deploy static content to Pages
+# DESHABILITADO - Usando Vercel en su lugar
+# Flujo de trabajo para desplegar contenido estático en GitHub Pages
+name: Desplegar contenido estático en Pages (DISABLED)
 
 on:
-  push:
-    branches: [ "master" ]
+  # push:
+  #   branches: [ "master" ] # Cambia a tu rama principal si es diferente
+  workflow_dispatch: # Solo manual
 
 permissions:
   contents: read
@@ -18,24 +20,29 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: Checkout del repositorio
         uses: actions/checkout@v4
-      - name: Install Node.js
+
+      - name: Instalar Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '18.x'
-      - name: Install dependencies
+
+      - name: Instalar dependencias
         run: |
           cd Frontend_Portal50
           npm install
-      - name: Build
+
+      - name: Construir el proyecto
         run: |
           cd Frontend_Portal50
           npm run build
-      - name: Upload artifact
+
+      - name: Subir artefacto para Pages
         uses: actions/upload-pages-artifact@v3
         with:
           path: './Frontend_Portal50/dist'
-      - name: Deploy to GitHub Pages
+
+      - name: Desplegar en GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
