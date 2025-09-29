@@ -11,15 +11,13 @@ yarn-error.log*
 .DS_Store
 Thumbs.db
 
-# Archivos sensibles y de configuración
+# Archivos sensibles y de configuración del Backend
 Backend_Portal50/serviceAccountKey.json
-Backend_Portal50/dist/config/firebase.js
-Backend_Portal50/dist/controllers/empresa.controller.js
-Backend_Portal50/src/config/firebase.ts
 Backend_Portal50/src/config/db.ts
-Backend_Portal50/src/config/swagger.ts
-Frontend_Portal50/src/firebase.ts
 *.env
 *.env.*
 Backend_Portal50/.env
 Frontend_Portal50/.env
+
+# Archivos compilados del Backend
+Backend_Portal50/dist/

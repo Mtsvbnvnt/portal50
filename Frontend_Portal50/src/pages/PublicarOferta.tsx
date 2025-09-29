@@ -1,6 +1,7 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { auth } from "../firebase";
+import { useNavigate } from "react-router-dom";
+import { getApiUrl } from "../config/api";
 
 export default function PublicarOferta() {
   const navigate = useNavigate();
@@ -53,7 +54,7 @@ export default function PublicarOferta() {
 
       const idToken = await auth.currentUser?.getIdToken();
 
-      const res = await fetch("http://localhost:3000/api/jobs", {
+      const res = await fetch(getApiUrl("/api/jobs"), {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

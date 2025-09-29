@@ -1,6 +1,8 @@
+import { getApiUrl } from '../config/api';
+
 export const saveTipoContratacion = async (uid: string, tipo: string, token: string) => {
   try {
-    const response = await fetch(`http://localhost:3000/api/empresas/tipo-contratacion`, {
+    const response = await fetch(getApiUrl('/api/empresas/tipo-contratacion'), {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

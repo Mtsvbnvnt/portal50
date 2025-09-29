@@ -1,4 +1,5 @@
 import { getAuth } from 'firebase/auth';
+import { getApiUrl } from '../config/api';
 
 export const getUserRoleByUid = async (uid: string): Promise<string | null> => {
   try {
@@ -9,7 +10,7 @@ export const getUserRoleByUid = async (uid: string): Promise<string | null> => {
     const idToken = await user.getIdToken();
     
     // Intentar obtener como usuario
-    let res = await fetch(`http://localhost:3000/api/users/uid/${uid}`, {
+    let res = await fetch(getApiUrl(`/api/users/uid/${uid}`), {
       headers: { Authorization: `Bearer ${idToken}` },
     });
     
@@ -19,7 +20,7 @@ export const getUserRoleByUid = async (uid: string): Promise<string | null> => {
     }
     
     // Si no es usuario, intentar como empresa
-    res = await fetch(`http://localhost:3000/api/empresas/uid/${uid}`, {
+    res = await fetch(getApiUrl(`/api/empresas/uid/${uid}`), {
       headers: { Authorization: `Bearer ${idToken}` },
     });
     
