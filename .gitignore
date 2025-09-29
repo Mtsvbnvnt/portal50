@@ -16,6 +16,7 @@ Backend_Portal50/serviceAccountKey.json
 Backend_Portal50/src/config/db.ts
 *.env
 *.env.*
+!*.env.example
 Backend_Portal50/.env
 Frontend_Portal50/.env
 
