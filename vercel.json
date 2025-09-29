@@ -1,14 +1,6 @@
 {
-  "version": 2,
-  "builds": [
-    {
-      "src": "Frontend_Portal50/package.json",
-      "use": "@vercel/static-build",
-      "config": {
-        "distDir": "Frontend_Portal50/dist"
-      }
-    }
-  ],
+  "buildCommand": "cd Frontend_Portal50 && npm install && npm run build",
+  "outputDirectory": "Frontend_Portal50/dist",
   "routes": [
     {
       "src": "/(.*)",
