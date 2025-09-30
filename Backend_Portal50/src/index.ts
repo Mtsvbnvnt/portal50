@@ -16,7 +16,7 @@ import empresaRoutes from './routes/empresa.routes';
 
 // Config
 import { swaggerSpec } from './config/swagger';
-import mongoose from 'mongoose';
+import { connectDB } from './config/db';
 
 dotenv.config();
 
@@ -57,29 +57,20 @@ app.use('/api/empresas', empresaRoutes);
 app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 // =============================================
-// 🔗 Conexión a MongoDB
+// � Conectar a BD y iniciar servidor
 // =============================================
-const MONGO_URL = process.env.MONGO_URL as string;
-
-if (!MONGO_URL) {
-  console.warn("⚠️ No se encontró MONGO_URL - API funcionará sin base de datos");
-} else {
-  mongoose.connect(MONGO_URL, {
-    // Opciones recomendadas para Mongoose 7+
-  })
-    .then(() => console.log("✅ Conectado a MongoDB"))
-    .catch(err => {
-      console.error("❌ Error conectando a MongoDB:", err);
-      console.warn("⚠️ API continuará sin base de datos");
-    });
-}
-
-// =============================================
-// 🚀 Iniciar servidor (independiente de MongoDB)
-// =============================================
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`🚀 API corriendo en puerto ${PORT}`);
-  console.log(`📚 Documentación en: http://localhost:${PORT}/api/docs`);
-  console.log(`🔗 Health check: http://localhost:${PORT}/ping`);
+connectDB().then(() => {
+  const PORT = process.env.PORT || 3000;
+  app.listen(PORT, () => {
+    console.log(`🚀 API corriendo en puerto ${PORT}`);
+    console.log(`📚 Documentación en: http://localhost:${PORT}/api/docs`);
+    console.log(`🔗 Health check: http://localhost:${PORT}/ping`);
+  });
+}).catch((err) => {
+  console.error("❌ Error en startup:", err);
+  // Iniciar servidor sin BD como fallback
+  const PORT = process.env.PORT || 3000;
+  app.listen(PORT, () => {
+    console.log(`🚀 API corriendo en puerto ${PORT} (sin BD)`);
+  });
 });
