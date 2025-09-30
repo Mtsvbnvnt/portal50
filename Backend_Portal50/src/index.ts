@@ -1,6 +1,13 @@
 import express from 'express';
-import dotenv from 'dotenv';
-import path from 'path';
+import dotenv from 'dotenv'// =============================================
+// 🔥 Conectar a BD y iniciar servidor
+// =============================================
+connectDB().then(() => {
+  const PORT = process.env.PORT || 3000;
+  app.listen(PORT, () => {
+    console.log(`🚀 API corriendo en puerto ${PORT}`);
+  });
+}); 'path';
 import cors from 'cors';
 import swaggerUi from 'swagger-ui-express';
 
@@ -16,7 +23,7 @@ import empresaRoutes from './routes/empresa.routes';
 
 // Config
 import { swaggerSpec } from './config/swagger';
-import { connectDB } from './config/db';
+import connectDB from './config/db';
 
 dotenv.config();
 
