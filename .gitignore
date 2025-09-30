@@ -22,3 +22,4 @@ Frontend_Portal50/.env
 
 # Archivos compilados del Backend
 Backend_Portal50/dist/
+.vercel
