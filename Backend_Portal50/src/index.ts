@@ -6,6 +6,14 @@ connectDB().then(() => {
   const PORT = process.env.PORT || 3000;
   app.listen(PORT, () => {
     console.log(`🚀 API corriendo en puerto ${PORT}`);
+    console.log(`📚 Documentación: /api/docs`);
+    console.log(`🔗 Health check: /ping`);
+  });
+}).catch((err) => {
+  console.warn("⚠️ Iniciando servidor sin BD:", err?.message);
+  const PORT = process.env.PORT || 3000;
+  app.listen(PORT, () => {
+    console.log(`🚀 API corriendo en puerto ${PORT} (sin BD)`);
   });
 }); 'path';
 import cors from 'cors';
