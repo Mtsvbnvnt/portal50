@@ -28,7 +28,7 @@ export default function Home() {
   }, [location.state]);
 
   return (
-    <main className="min-h-screen bg-white text-gray-800 relative">
+    <main className="min-h-screen bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-200 relative transition-colors duration-200">
       {/* Barra verde de éxito */}
       {showSuccess && (
         <div className="fixed top-0 left-0 w-full bg-green-500 text-white text-center py-2 z-50">
@@ -42,10 +42,10 @@ export default function Home() {
       )}
 
       {/* Hero principal */}
-      <section className="bg-gray-100 py-20 px-4 text-center">
+      <section className="bg-gray-100 dark:bg-gray-800 py-20 px-4 text-center transition-colors duration-200">
         <h1 className="text-6xl md:text-7xl font-extrabold mb-6">
-          Bienvenido a <span className="text-black">Portal</span>
-          <span className="text-blue-600">50+</span>
+          Bienvenido a <span className="text-black dark:text-white">Portal</span>
+          <span className="text-blue-600 dark:text-blue-400">50+</span>
         </h1>
         <p className="text-2xl md:text-3xl mb-10 max-w-3xl mx-auto font-medium">
           Tu comunidad para conectar empresas, profesionales y aprendices con oportunidades reales.
@@ -85,11 +85,11 @@ export default function Home() {
       </section>
 
       {/* Sección de información destacada */}
-      <section className="pt-8 pb-20 px-4 bg-gray-50">
+      <section className="pt-8 pb-20 px-4 bg-gray-50 dark:bg-gray-800 transition-colors duration-200">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold mb-6 text-gray-800">¿Qué es Portal50+?</h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+            <h2 className="text-4xl font-bold mb-6 text-gray-800 dark:text-gray-200">¿Qué es Portal50+?</h2>
+            <p className="text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
               Portal50+ es una plataforma que impulsa la conexión entre profesionales con experiencia,
               empresas que valoran el talento y aprendices que buscan crecer.
             </p>
@@ -97,8 +97,8 @@ export default function Home() {
           
           <div className="grid lg:grid-cols-3 gap-8">
             {/* Quiero trabajar */}
-            <div className="bg-white rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-200 overflow-hidden flex flex-col h-full">
-              <div className="bg-blue-600 p-6 text-white">
+            <div className="bg-white dark:bg-gray-700 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-200 dark:border-gray-600 overflow-hidden flex flex-col h-full">
+              <div className="bg-blue-600 dark:bg-blue-700 p-6 text-white">
                 <h3 className="text-2xl font-semibold mb-2">Quiero trabajar</h3>
                 <div className="w-12 h-0.5 bg-blue-200"></div>
               </div>
@@ -136,17 +136,17 @@ export default function Home() {
             </div>
 
             {/* Quiero contratar */}
-            <div className="bg-white rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-200 overflow-hidden flex flex-col h-full">
-              <div className="bg-green-600 p-6 text-white">
+            <div className="bg-white dark:bg-gray-700 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-200 dark:border-gray-600 overflow-hidden flex flex-col h-full">
+              <div className="bg-green-600 dark:bg-green-700 p-6 text-white">
                 <h3 className="text-2xl font-semibold mb-2">Quiero contratar</h3>
-                <div className="w-12 h-0.5 bg-green-200"></div>
+                <div className="w-12 h-0.5 bg-green-200 dark:bg-green-300"></div>
               </div>
               <div className="p-8 flex flex-col flex-grow">
                 <div className="space-y-4 mb-8 flex-grow">
-                  <p className="text-gray-700 leading-relaxed font-medium">
+                  <p className="text-gray-700 dark:text-gray-200 leading-relaxed font-medium">
                     ¿Necesitas talento experimentado para tu empresa? Regístrate como empresa para:
                   </p>
-                  <ul className="space-y-3 text-gray-600">
+                  <ul className="space-y-3 text-gray-600 dark:text-gray-300">
                     <li className="flex items-start">
                       <span className="text-green-600 mr-3 mt-1">▪</span>
                       Publicar ofertas laborales específicas
@@ -175,17 +175,17 @@ export default function Home() {
             </div>
 
             {/* Quiero aprender */}
-            <div className="bg-white rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-200 overflow-hidden flex flex-col h-full">
-              <div className="bg-purple-600 p-6 text-white">
+            <div className="bg-white dark:bg-gray-700 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-200 dark:border-gray-600 overflow-hidden flex flex-col h-full">
+              <div className="bg-purple-600 dark:bg-purple-700 p-6 text-white">
                 <h3 className="text-2xl font-semibold mb-2">Quiero aprender</h3>
-                <div className="w-12 h-0.5 bg-purple-200"></div>
+                <div className="w-12 h-0.5 bg-purple-200 dark:bg-purple-300"></div>
               </div>
               <div className="p-8 flex flex-col flex-grow">
                 <div className="space-y-4 mb-8 flex-grow">
-                  <p className="text-gray-700 leading-relaxed font-medium">
+                  <p className="text-gray-700 dark:text-gray-200 leading-relaxed font-medium">
                     ¿Quieres aprender y crecer profesionalmente? Únete como aprendiz para:
                   </p>
-                  <ul className="space-y-3 text-gray-600">
+                  <ul className="space-y-3 text-gray-600 dark:text-gray-300">
                     <li className="flex items-start">
                       <span className="text-purple-600 mr-3 mt-1">▪</span>
                       Acceder a cursos y capacitaciones

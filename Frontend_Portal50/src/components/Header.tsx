@@ -7,6 +7,7 @@ import { UserContext } from "../context/UserContext";
 import { getApiUrl } from "../config/api";
 import { useTranslation } from 'react-i18next';
 import LanguageSelector from './LanguageSelector';
+import ThemeToggle from './ThemeToggle';
 
 export default function Header() {
   const navigate = useNavigate();
@@ -86,7 +87,7 @@ export default function Header() {
   };
 
   return (
-    <header className="bg-gray-200 text-gray-800 py-4 shadow w-full">
+    <header className="bg-gray-200 dark:bg-gray-800 text-gray-800 dark:text-gray-200 py-4 shadow w-full transition-colors duration-200">
       <div className="container mx-auto flex flex-col md:flex-row items-center px-4">
         {/* IZQUIERDA */}
         <Link to="/" className="flex items-center space-x-2 text-2xl font-bold mb-2 md:mb-0">
@@ -96,34 +97,34 @@ export default function Header() {
             className="w-10 h-10 md:w-12 md:h-12 object-contain"
           />
           <div>
-            <span className="text-black">Portal</span>
+            <span className="text-black dark:text-white">Portal</span>
             <span className="text-blue-600">50+</span>
           </div>
         </Link>
 
         {/* CENTRO */}
         <nav className="flex-1 flex flex-wrap justify-center space-x-2 md:space-x-6 text-base md:text-lg">
-          <Link to="/" className="hover:text-blue-600">{t('navigation.home')}</Link>
+          <Link to="/" className="hover:text-blue-600 dark:hover:text-blue-400">{t('navigation.home')}</Link>
           {/* Empresa: Quiero contratar y Quiero aprender */}
           {user?.rol === "empresa" && (
             <>
-              <Link to="/quiero-contratar" className="hover:text-blue-600">{t('header.hire')}</Link>
-              <Link to="/aprender" className="hover:text-blue-600">{t('header.learn')}</Link>
+              <Link to="/quiero-contratar" className="hover:text-blue-600 dark:hover:text-blue-400">{t('header.hire')}</Link>
+              <Link to="/aprender" className="hover:text-blue-600 dark:hover:text-blue-400">{t('header.learn')}</Link>
             </>
           )}
           {/* Trabajador: Quiero trabajar y Quiero aprender */}
           {(user?.rol === "profesional" || user?.rol === "profesional-ejecutivo") && (
             <>
-              <Link to="/trabajar" className="hover:text-blue-600">{t('header.work')}</Link>
-              <Link to="/aprender" className="hover:text-blue-600">{t('header.learn')}</Link>
+              <Link to="/trabajar" className="hover:text-blue-600 dark:hover:text-blue-400">{t('header.work')}</Link>
+              <Link to="/aprender" className="hover:text-blue-600 dark:hover:text-blue-400">{t('header.learn')}</Link>
             </>
           )}
           {/* Invitado: muestra ambos */}
           {!user && (
             <>
-              <Link to="/quiero-contratar" className="hover:text-blue-600">{t('header.hire')}</Link>
-              <Link to="/trabajar" className="hover:text-blue-600">{t('header.work')}</Link>
-              <Link to="/aprender" className="hover:text-blue-600">{t('header.learn')}</Link>
+              <Link to="/quiero-contratar" className="hover:text-blue-600 dark:hover:text-blue-400">{t('header.hire')}</Link>
+              <Link to="/trabajar" className="hover:text-blue-600 dark:hover:text-blue-400">{t('header.work')}</Link>
+              <Link to="/aprender" className="hover:text-blue-600 dark:hover:text-blue-400">{t('header.learn')}</Link>
             </>
           )}
         </nav>
@@ -158,60 +159,65 @@ export default function Header() {
 
               {/* Dropdown */}
               <div
-                className={`absolute right-0 top-full mt-0 w-52 bg-white border rounded shadow z-50 transition-all duration-200 transform origin-top
+                className={`absolute right-0 top-full mt-0 w-52 bg-white dark:bg-gray-800 border dark:border-gray-700 rounded shadow z-50 transition-all duration-200 transform origin-top
                   opacity-0 scale-95 pointer-events-none
                   group-hover:opacity-100 group-hover:scale-100 group-hover:pointer-events-auto`}
               >
                 {user.rol === "profesional" && (
-                  <Link to="/dashboard" className="px-4 py-2 hover:bg-gray-200 flex items-center">
+                  <Link to="/dashboard" className="px-4 py-2 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-800 dark:text-gray-200 flex items-center">
                     <LiaChartPieSolid className="mr-2" />
                     <span>{t('header.dashboard')}</span>
                   </Link>
                 )}
                 {user.rol === "empresa" && (
-                  <Link to="/empresa" className="px-4 py-2 hover:bg-gray-200 flex items-center">
+                  <Link to="/empresa" className="px-4 py-2 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-800 dark:text-gray-200 flex items-center">
                     <LiaChartPieSolid className="mr-2" />
                     <span>{t('header.company_dashboard')}</span>
                   </Link>
                 )}
                 {user.rol === "ejecutivo" && (
                   <>
-                    <Link to="/ejecutivo" className="px-4 py-2 hover:bg-gray-200 flex items-center">
+                    <Link to="/ejecutivo" className="px-4 py-2 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-800 dark:text-gray-200 flex items-center">
                       <LiaChartPieSolid className="mr-2" />
                       <span>Panel Ejecutivo</span>
                     </Link>
-                    <Link to="/empresa" className="px-4 py-2 hover:bg-gray-200 flex items-center">
+                    <Link to="/empresa" className="px-4 py-2 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-800 dark:text-gray-200 flex items-center">
                       <LiaChartPieSolid className="mr-2" />
                       <span>{t('header.company_dashboard')}</span>
                     </Link>
                   </>
                 )}
                 {user.rol === "admin-fraccional" && (
-                  <Link to="/admin-fraccional" className="px-4 py-2 hover:bg-gray-200 flex items-center">
+                  <Link to="/admin-fraccional" className="px-4 py-2 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-800 dark:text-gray-200 flex items-center">
                     <LiaChartPieSolid className="mr-2" />
                     <span>Panel Admin</span>
                   </Link>
                 )}
-                <Link to="/configuracion" className="px-4 py-2 hover:bg-gray-200 flex items-center">
+                <Link to="/configuracion" className="px-4 py-2 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-800 dark:text-gray-200 flex items-center">
                   <LiaCogSolid className="mr-2" />
                   <span>{t('header.settings')}</span>
                 </Link>
                 <button
                   onClick={handleSignOut}
-                  className="w-full text-left px-4 py-2 hover:bg-red-100 text-red-600 flex items-center"
+                  className="w-full text-left px-4 py-2 hover:bg-red-100 dark:hover:bg-red-900/30 text-red-600 dark:text-red-400 flex items-center"
                 >
                   <LiaTimesSolid className="text-red-500 text-sm mr-2" />
                   <span>{t('header.logout')}</span>
                 </button>
-                <div className="border-t border-gray-200 p-2">
+                <div className="border-t border-gray-200 dark:border-gray-600 p-2 space-y-2">
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm text-gray-600 dark:text-gray-400">Tema</span>
+                    <ThemeToggle />
+                  </div>
                   <LanguageSelector />
                 </div>
               </div>
             </div>
           ) : (
             <div className="flex items-center space-x-4">
+              <ThemeToggle />
               <LanguageSelector />
-              <Link to="/login" className="hover:text-blue-600">{t('header.login')}</Link>
+              <Link to="/login" className="hover:text-blue-600 dark:hover:text-blue-400">{t('header.login')}</Link>
             </div>
           )}
         </div>

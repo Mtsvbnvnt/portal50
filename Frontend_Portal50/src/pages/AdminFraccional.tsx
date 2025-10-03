@@ -129,19 +129,19 @@ const AdminFraccional: React.FC = () => {
   };
 
   return (
-    <main className="min-h-screen bg-gray-50 p-8">
-      <h1 className="text-3xl font-bold mb-4">Panel Administrador Fraccional</h1>
-      <p className="mb-6 text-gray-700">Aquí podrás gestionar ejecutivos, ver todas las empresas, sus ofertas y postulantes.</p>
+    <main className="min-h-screen bg-gray-50 dark:bg-gray-900 p-8">
+      <h1 className="text-3xl font-bold mb-4 text-gray-900 dark:text-white">Panel Administrador Fraccional</h1>
+      <p className="mb-6 text-gray-700 dark:text-gray-300">Aquí podrás gestionar ejecutivos, ver todas las empresas, sus ofertas y postulantes.</p>
       
       <div className="flex gap-4 mb-8">
         <button
-          className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-semibold transition-colors"
+          className="bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-800 text-white px-6 py-2 rounded-lg font-semibold transition-colors"
           onClick={() => setShowModal(true)}
         >
           Crear Ejecutivo Nuevo
         </button>
         <button
-          className="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg font-semibold transition-colors"
+          className="bg-green-600 hover:bg-green-700 dark:bg-green-700 dark:hover:bg-green-800 text-white px-6 py-2 rounded-lg font-semibold transition-colors"
           onClick={() => {
             setShowEjecutivos(!showEjecutivos);
             if (!showEjecutivos) {
@@ -155,8 +155,8 @@ const AdminFraccional: React.FC = () => {
 
       {/* Modal para crear ejecutivo */}
       {showModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
-          <div className="bg-white p-8 rounded-lg shadow-xl max-w-lg w-full relative max-h-[90vh] overflow-y-auto">
+        <div className="fixed inset-0 bg-black bg-opacity-40 dark:bg-opacity-60 flex items-center justify-center z-50">
+          <div className="bg-white dark:bg-gray-800 p-8 rounded-lg shadow-xl max-w-lg w-full relative max-h-[90vh] overflow-y-auto">
             <button 
               className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 text-2xl font-bold" 
               onClick={() => { 
