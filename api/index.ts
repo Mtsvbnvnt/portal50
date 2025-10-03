@@ -1,5 +1,5 @@
 // Vercel serverless function entry point
-import { VercelRequest, VercelResponse } from '@vercel/node';
+import type { IncomingMessage, ServerResponse } from 'http';
 
 // Import the Express app
 let app: any;
@@ -11,16 +11,21 @@ try {
   console.error('Error importing app:', error);
 }
 
-export default async function handler(req: VercelRequest, res: VercelResponse) {
+export default async function handler(req: IncomingMessage, res: ServerResponse) {
   try {
     if (!app) {
-      return res.status(500).json({ error: 'App not available' });
+      res.statusCode = 500;
+      res.setHeader('Content-Type', 'application/json');
+      res.end(JSON.stringify({ error: 'App not available' }));
+      return;
     }
     
     // Handle the request with Express app
     return app(req, res);
   } catch (error) {
     console.error('Handler error:', error);
-    return res.status(500).json({ error: 'Internal server error' });
+    res.statusCode = 500;
+    res.setHeader('Content-Type', 'application/json');
+    res.end(JSON.stringify({ error: 'Internal server error' }));
   }
 }
