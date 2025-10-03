@@ -24,7 +24,7 @@ export default function EmpresaPanel() {
         }
 
         if (user.rol === "profesional") {
-          const empresasRes = await fetch(`http://localhost:3000/api/empresas/activas`, {
+          const empresasRes = await fetch(`http://localhost:3001/api/empresas/activas`, {
             headers: { Authorization: `Bearer ${idToken}` },
           });
           if (empresasRes.ok) {
@@ -46,14 +46,14 @@ export default function EmpresaPanel() {
             try {
               const idToken = await auth.currentUser?.getIdToken();
 
-              const resEmpresa = await fetch(`http://localhost:3000/api/empresas/uid/${empresaUid}`, {
+              const resEmpresa = await fetch(`http://localhost:3001/api/empresas/uid/${empresaUid}`, {
                 headers: { Authorization: `Bearer ${idToken}` },
               });
               if (!resEmpresa.ok) throw new Error("Error obteniendo empresa");
               const empresaData = await resEmpresa.json();
               setEmpresa(empresaData);
 
-              const resOfertas = await fetch(`http://localhost:3000/api/jobs`, {
+              const resOfertas = await fetch(`http://localhost:3001/api/jobs`, {
                 headers: { Authorization: `Bearer ${idToken}` },
               });
               if (!resOfertas.ok) throw new Error("Error obteniendo ofertas");
@@ -80,7 +80,7 @@ export default function EmpresaPanel() {
   const handleDelete = async (id: string) => {
     try {
       const idToken = await auth.currentUser?.getIdToken();
-      const res = await fetch(`http://localhost:3000/api/jobs/${id}`, {
+      const res = await fetch(`http://localhost:3001/api/jobs/${id}`, {
         method: "DELETE",
         headers: { Authorization: `Bearer ${idToken}` },
       });
@@ -96,7 +96,7 @@ export default function EmpresaPanel() {
       const idToken = await auth.currentUser?.getIdToken();
       const nuevoEstado = currentEstado === "activa" ? "pausada" : "activa";
 
-      const res = await fetch(`http://localhost:3000/api/jobs/${id}`, {
+      const res = await fetch(`http://localhost:3001/api/jobs/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -115,99 +115,92 @@ export default function EmpresaPanel() {
     }
   };
 
-  const handleAgregarEjecutivo = async () => {
-    const profesionalId = prompt("🔍 Ingresa el UID del profesional a asignar:");
-    if (!profesionalId) return;
-
-    try {
-      const idToken = await auth.currentUser?.getIdToken();
-      const res = await fetch(`http://localhost:3000/api/empresas/${empresa._id}/ejecutivos`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${idToken}`,
-        },
-        body: JSON.stringify({ userId: profesionalId, action: "add" }),
-      });
-      if (!res.ok) throw new Error("Error asignando ejecutivo");
-      const data = await res.json();
-      setEmpresa(data.empresa);
-    } catch (err) {
-      console.error("❌ Error agregando ejecutivo:", err);
-    }
-  };
-
-  const handleEliminarEjecutivo = async (uid: string) => {
-    try {
-      const idToken = await auth.currentUser?.getIdToken();
-      const res = await fetch(`http://localhost:3000/api/empresas/${empresa._id}/ejecutivos`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${idToken}`,
-        },
-        body: JSON.stringify({ userId: uid, action: "remove" }),
-      });
-      if (!res.ok) throw new Error("Error eliminando ejecutivo");
-      const data = await res.json();
-      setEmpresa(data.empresa);
-    } catch (err) {
-      console.error("❌ Error eliminando ejecutivo:", err);
-    }
-  };
-
   return (
     <main className="min-h-screen bg-gray-50 p-6 text-gray-800">
       <h1 className="text-2xl font-bold mb-1">Dashboard Empresarial</h1>
       <p className="mb-4 text-gray-600">Gestiona tus publicaciones y tu equipo ejecutivo</p>
 
       <div className="border rounded p-4 mb-4 bg-white shadow">
-        <h2 className="font-semibold mb-2 flex justify-between items-center">
-          <span>👤 Ejecutivo Asignado</span>
-          <button
-            onClick={handleAgregarEjecutivo}
-            className="bg-blue-600 text-white px-3 py-1 rounded text-sm"
-          >
-            ➕ Agregar Ejecutivo
-          </button>
+        <h2 className="font-semibold mb-2 text-lg text-gray-800">
+          👤 Ejecutivo Asignado
         </h2>
 
         {empresa?.ejecutivos?.length > 0 ? (
           empresa.ejecutivos.map((ej: any) => (
-            <div key={ej._id} className="flex items-center justify-between border-t pt-2 mt-2">
-              <div>
-                <p className="font-bold">{ej.nombre}</p>
-                <p className="text-sm text-gray-600">{ej.email}</p>
-                <p className="text-sm text-gray-600">Teléfono: {ej.telefono || "Sin teléfono registrado"}</p>
-              </div>
-              <div className="space-x-2 flex items-center">
-                <a
-                  href={`mailto:${ej.email}`}
-                  className="px-3 py-1 bg-blue-700 text-white text-sm rounded hover:bg-blue-800"
-                  title="Enviar correo"
-                >
-                  Email
-                </a>
-                <a
-                  href={ej.telefono ? `https://wa.me/${ej.telefono.replace(/[^\d]/g, "")}` : '#'}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={`px-3 py-1 bg-green-600 text-white text-sm rounded hover:bg-green-700 ${ej.telefono ? '' : 'opacity-50 pointer-events-none'}`}
-                  title="Enviar WhatsApp"
-                >
-                  WhatsApp
-                </a>
-                <button
-                  className="px-3 py-1 bg-red-600 text-white text-sm rounded"
-                  onClick={() => handleEliminarEjecutivo(ej.uid)}
-                >
-                  Eliminar
-                </button>
+            <div key={ej._id} className="bg-gray-50 rounded-lg p-4 border">
+              <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                <div className="flex-1">
+                  <h3 className="text-xl font-bold text-gray-800 mb-2">
+                    {ej.nombre} {ej.apellido || ''}
+                  </h3>
+                  
+                  <div className="grid md:grid-cols-2 gap-3 text-sm">
+                    <div className="flex items-center gap-2">
+                      <span className="font-semibold text-gray-600">📧 Email:</span>
+                      <span className="text-gray-800">{ej.email}</span>
+                    </div>
+                    
+                    <div className="flex items-center gap-2">
+                      <span className="font-semibold text-gray-600">📞 Teléfono:</span>
+                      <span className="text-gray-800">
+                        {ej.telefono || "Sin teléfono registrado"}
+                      </span>
+                    </div>
+                    
+                    <div className="flex items-center gap-2">
+                      <span className="font-semibold text-gray-600">🎯 Rol:</span>
+                      <span className="text-gray-800 capitalize">{ej.rol}</span>
+                    </div>
+                    
+                    <div className="flex items-center gap-2">
+                      <span className="font-semibold text-gray-600">🟢 Estado:</span>
+                      <span className="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs font-medium">
+                        Activo
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="flex flex-col sm:flex-row gap-2">
+                  <a
+                    href={`mailto:${ej.email}`}
+                    className="flex items-center justify-center gap-2 px-4 py-2 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700 transition-colors"
+                    title="Enviar correo electrónico"
+                  >
+                    📧 Email
+                  </a>
+                  
+                  {ej.telefono && (
+                    <a
+                      href={`https://wa.me/${ej.telefono.replace(/[^\d]/g, "")}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center justify-center gap-2 px-4 py-2 bg-green-600 text-white text-sm rounded-lg hover:bg-green-700 transition-colors"
+                      title="Enviar mensaje por WhatsApp"
+                    >
+                      📱 WhatsApp
+                    </a>
+                  )}
+                  
+                  {ej.telefono && (
+                    <a
+                      href={`tel:${ej.telefono}`}
+                      className="flex items-center justify-center gap-2 px-4 py-2 bg-purple-600 text-white text-sm rounded-lg hover:bg-purple-700 transition-colors"
+                      title="Llamar por teléfono"
+                    >
+                      📞 Llamar
+                    </a>
+                  )}
+                </div>
               </div>
             </div>
           ))
         ) : (
-          <p className="text-sm text-gray-500">No tienes ejecutivos asignados aún.</p>
+          <div className="text-center py-8 text-gray-500">
+            <div className="text-4xl mb-2">👥</div>
+            <p className="text-lg font-medium">No tienes ejecutivos asignados aún</p>
+            <p className="text-sm">Un administrador debe asignarte un ejecutivo desde el panel de administración.</p>
+          </div>
         )}
       </div>
 

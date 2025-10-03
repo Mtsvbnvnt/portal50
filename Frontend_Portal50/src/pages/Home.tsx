@@ -85,47 +85,135 @@ export default function Home() {
       </section>
 
       {/* Sección de información destacada */}
-      <section className="py-20 px-4 bg-white text-center">
-        <h2 className="text-3xl font-bold mb-6">¿Qué es Portal50+?</h2>
-        <p className="text-gray-600 max-w-3xl mx-auto mb-8">
-          Portal50+ es una plataforma que impulsa la conexión entre profesionales con experiencia,
-          empresas que valoran el talento y aprendices que buscan crecer.
-        </p>
-        <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-            <Link to="/register-usuario" className="border p-4 sm:p-6 rounded shadow hover:shadow-lg transition bg-white hover:bg-blue-50 cursor-pointer block">
-              <h3 className="text-lg sm:text-xl font-bold mb-2">Profesionales</h3>
-              <p className="text-gray-600 text-sm sm:text-base">
-                Encuentra trabajo, publica tu perfil y accede a cursos para mejorar tus habilidades.
-              </p>
-              <span className="mt-3 inline-block text-blue-600 font-semibold">Regístrate como profesional →</span>
-            </Link>
-            <Link to="/register-empresa" className="border p-4 sm:p-6 rounded shadow hover:shadow-lg transition bg-white hover:bg-green-50 cursor-pointer block">
-              <h3 className="text-lg sm:text-xl font-bold mb-2">Quiero Contratar</h3>
-              <p className="text-gray-600 text-sm sm:text-base">
-                Publica ofertas laborales, busca talento y conecta con profesionales capacitados.
-              </p>
-              <span className="mt-3 inline-block text-green-600 font-semibold">Regístrate como empresa →</span>
-            </Link>
-            <Link to="/register-usuario?rol=aprendiz" className="border p-4 sm:p-6 rounded shadow hover:shadow-lg transition bg-white hover:bg-purple-50 cursor-pointer block">
-              <h3 className="text-lg sm:text-xl font-bold mb-2">Aprendices</h3>
-              <p className="text-gray-600 text-sm sm:text-base">
-                Accede a cursos, mentorías y oportunidades para iniciar tu carrera profesional.
-              </p>
-              <span className="mt-3 inline-block text-purple-600 font-semibold">Regístrate como aprendiz →</span>
-            </Link>
-        </div>
-      </section>
+      <section className="pt-8 pb-20 px-4 bg-gray-50">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold mb-6 text-gray-800">¿Qué es Portal50+?</h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              Portal50+ es una plataforma que impulsa la conexión entre profesionales con experiencia,
+              empresas que valoran el talento y aprendices que buscan crecer.
+            </p>
+          </div>
+          
+          <div className="grid lg:grid-cols-3 gap-8">
+            {/* Quiero trabajar */}
+            <div className="bg-white rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-200 overflow-hidden flex flex-col h-full">
+              <div className="bg-blue-600 p-6 text-white">
+                <h3 className="text-2xl font-semibold mb-2">Quiero trabajar</h3>
+                <div className="w-12 h-0.5 bg-blue-200"></div>
+              </div>
+              <div className="p-8 flex flex-col flex-grow">
+                <div className="space-y-4 mb-8 flex-grow">
+                  <p className="text-gray-700 leading-relaxed font-medium">
+                    ¿Tienes experiencia y buscas nuevas oportunidades laborales? Únete como profesional para:
+                  </p>
+                  <ul className="space-y-3 text-gray-600">
+                    <li className="flex items-start">
+                      <span className="text-blue-600 mr-3 mt-1">▪</span>
+                      Encontrar empleos que valoren tu experiencia
+                    </li>
+                    <li className="flex items-start">
+                      <span className="text-blue-600 mr-3 mt-1">▪</span>
+                      Crear un perfil profesional destacado
+                    </li>
+                    <li className="flex items-start">
+                      <span className="text-blue-600 mr-3 mt-1">▪</span>
+                      Acceder a cursos de actualización
+                    </li>
+                    <li className="flex items-start">
+                      <span className="text-blue-600 mr-3 mt-1">▪</span>
+                      Conectar con empresas que te buscan
+                    </li>
+                  </ul>
+                </div>
+                <Link
+                  to="/register-usuario"
+                  className="block w-full bg-blue-600 text-white text-center py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors duration-300 border-2 border-blue-600 hover:border-blue-700"
+                >
+                  Registrarse como Profesional
+                </Link>
+              </div>
+            </div>
 
-      {/* Call to Action final */}
-      <section className="bg-blue-600 py-16 px-4 text-center text-white">
-        <h2 className="text-3xl font-bold mb-4">¿Listo para unirte?</h2>
-        <p className="mb-8">Crea tu cuenta hoy mismo y comienza a conectar con oportunidades reales.</p>
-        <Link
-          to="/register"
-          className="bg-white text-blue-600 px-8 py-3 rounded-full hover:bg-slate-400 transition"
-        >
-          Crear Cuenta
-        </Link>
+            {/* Quiero contratar */}
+            <div className="bg-white rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-200 overflow-hidden flex flex-col h-full">
+              <div className="bg-green-600 p-6 text-white">
+                <h3 className="text-2xl font-semibold mb-2">Quiero contratar</h3>
+                <div className="w-12 h-0.5 bg-green-200"></div>
+              </div>
+              <div className="p-8 flex flex-col flex-grow">
+                <div className="space-y-4 mb-8 flex-grow">
+                  <p className="text-gray-700 leading-relaxed font-medium">
+                    ¿Necesitas talento experimentado para tu empresa? Regístrate como empresa para:
+                  </p>
+                  <ul className="space-y-3 text-gray-600">
+                    <li className="flex items-start">
+                      <span className="text-green-600 mr-3 mt-1">▪</span>
+                      Publicar ofertas laborales específicas
+                    </li>
+                    <li className="flex items-start">
+                      <span className="text-green-600 mr-3 mt-1">▪</span>
+                      Buscar profesionales calificados
+                    </li>
+                    <li className="flex items-start">
+                      <span className="text-green-600 mr-3 mt-1">▪</span>
+                      Acceder a una base de talento +50
+                    </li>
+                    <li className="flex items-start">
+                      <span className="text-green-600 mr-3 mt-1">▪</span>
+                      Gestionar postulaciones de manera eficiente
+                    </li>
+                  </ul>
+                </div>
+                <Link
+                  to="/register-empresa"
+                  className="block w-full bg-green-600 text-white text-center py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors duration-300 border-2 border-green-600 hover:border-green-700"
+                >
+                  Registrarse como Empresa
+                </Link>
+              </div>
+            </div>
+
+            {/* Quiero aprender */}
+            <div className="bg-white rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-200 overflow-hidden flex flex-col h-full">
+              <div className="bg-purple-600 p-6 text-white">
+                <h3 className="text-2xl font-semibold mb-2">Quiero aprender</h3>
+                <div className="w-12 h-0.5 bg-purple-200"></div>
+              </div>
+              <div className="p-8 flex flex-col flex-grow">
+                <div className="space-y-4 mb-8 flex-grow">
+                  <p className="text-gray-700 leading-relaxed font-medium">
+                    ¿Quieres aprender y crecer profesionalmente? Únete como aprendiz para:
+                  </p>
+                  <ul className="space-y-3 text-gray-600">
+                    <li className="flex items-start">
+                      <span className="text-purple-600 mr-3 mt-1">▪</span>
+                      Acceder a cursos y capacitaciones
+                    </li>
+                    <li className="flex items-start">
+                      <span className="text-purple-600 mr-3 mt-1">▪</span>
+                      Recibir mentorías de profesionales
+                    </li>
+                    <li className="flex items-start">
+                      <span className="text-purple-600 mr-3 mt-1">▪</span>
+                      Encontrar oportunidades de inicio
+                    </li>
+                    <li className="flex items-start">
+                      <span className="text-purple-600 mr-3 mt-1">▪</span>
+                      Desarrollar habilidades relevantes
+                    </li>
+                  </ul>
+                </div>
+                <Link
+                  to="/register-usuario?rol=aprendiz"
+                  className="block w-full bg-purple-600 text-white text-center py-3 rounded-lg font-semibold hover:bg-purple-700 transition-colors duration-300 border-2 border-purple-600 hover:border-purple-700"
+                >
+                  Registrarse como Aprendiz
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
       </section>
     </main>
   );

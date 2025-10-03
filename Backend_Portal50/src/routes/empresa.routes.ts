@@ -2,7 +2,7 @@
 import { Router } from 'express';
 import { createEmpresa, getEmpresaByUid, addEjecutivo,
          desactivarEmpresa, getEmpresasActivas, updateEjecutivo, getEmpresaById,
-         getProfesionalesActivos, uploadEmpresaFotoPerfil, updateEmpresa
+         getProfesionalesActivos, uploadEmpresaFotoPerfil, updateEmpresa, asignarEjecutivo, desasignarEjecutivo
         } from '../controllers/empresa.controller';
 import { uploadUsuario } from '../middlewares/upload.middleware';
 const router = Router();
@@ -235,6 +235,72 @@ router.post(
   uploadUsuario.single('fotoPerfil'),
   uploadEmpresaFotoPerfil
 );
+
+/**
+ * @swagger
+ * /api/empresas/{empresaId}/asignar-ejecutivo:
+ *   post:
+ *     summary: Asignar ejecutivo a una empresa por ID de MongoDB
+ *     tags: [Empresas]
+ *     parameters:
+ *       - name: empresaId
+ *         in: path
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID de la empresa (MongoDB _id)
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               ejecutivoId:
+ *                 type: string
+ *                 description: ID del ejecutivo (MongoDB _id)
+ *     responses:
+ *       200:
+ *         description: Ejecutivo asignado exitosamente
+ *       404:
+ *         description: Empresa o ejecutivo no encontrado
+ *       400:
+ *         description: Ejecutivo ya asignado o no válido
+ */
+router.post('/:empresaId/asignar-ejecutivo', asignarEjecutivo);
+
+/**
+ * @swagger
+ * /api/empresas/{empresaId}/desasignar-ejecutivo:
+ *   post:
+ *     summary: Desasignar ejecutivo de una empresa específica
+ *     tags: [Empresas]
+ *     parameters:
+ *       - name: empresaId
+ *         in: path
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID de la empresa (MongoDB _id)
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               ejecutivoId:
+ *                 type: string
+ *                 description: ID del ejecutivo (MongoDB _id)
+ *     responses:
+ *       200:
+ *         description: Ejecutivo desasignado exitosamente
+ *       404:
+ *         description: Empresa o ejecutivo no encontrado
+ *       400:
+ *         description: Error en la desasignación
+ */
+router.post('/:empresaId/desasignar-ejecutivo', desasignarEjecutivo);
 
 /**
  * @swagger

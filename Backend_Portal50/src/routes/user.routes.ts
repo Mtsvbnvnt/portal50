@@ -11,18 +11,25 @@ import {
   desactivarUsuario,
   createUser,
   getTrabajadores,
-  uploadFotoPerfil
+  uploadFotoPerfil,
+  getEjecutivoEmpresas
 } from '../controllers/user.controller';
 import { verifyFirebaseAuth } from '../middlewares/auth.middleware';
 import path from 'path';
 
-import { crearAdminFraccional } from '../controllers/adminfraccional.controller';
+import { crearAdminFraccional, obtenerEjecutivos } from '../controllers/adminfraccional.controller';
 
 
 const router = Router();
 
 // Crear usuario admin-fraccional (solo para uso interno/admin)
 router.post('/adminfraccional', crearAdminFraccional);
+
+// Obtener lista de ejecutivos (solo para admin-fraccional)
+router.get('/ejecutivos', obtenerEjecutivos);
+
+// Obtener empresas asignadas a un ejecutivo
+router.get('/ejecutivo/:ejecutivoId/empresas', getEjecutivoEmpresas);
 
 /**
  * @swagger

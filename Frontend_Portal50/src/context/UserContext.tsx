@@ -12,7 +12,7 @@ export interface User {
   cv?: string;
   fotoPerfil?: string;
   disponibilidad?: "disponible" | "con condiciones" | "no disponible";
-  rol?: "profesional" | "profesional-ejecutivo" | "empresa";
+  rol?: "profesional" | "profesional-ejecutivo" | "empresa" | "admin-fraccional" | "ejecutivo";
   educaciones?: { institucion: string; titulo: string; desde: string; hasta: string }[];
   experiencias?: { empresa: string; cargo: string; desde: string; hasta: string }[];
   habilidades?: string[];

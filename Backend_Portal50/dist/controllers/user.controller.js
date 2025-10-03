@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.uploadFotoPerfil = exports.getTrabajadores = exports.createUser = exports.desactivarUsuario = exports.uploadCVUsuario = exports.uploadVideoPresentacion = exports.updateUser = exports.getUser = void 0;
+exports.getEjecutivoEmpresas = exports.uploadFotoPerfil = exports.getTrabajadores = exports.createUser = exports.desactivarUsuario = exports.uploadCVUsuario = exports.uploadVideoPresentacion = exports.updateUser = exports.getUser = void 0;
 const user_model_1 = require("../models/user.model");
 // ✅ GET user por UID de Firebase (NO _id de Mongo)
 const getUser = async (req, res) => {
@@ -169,3 +169,39 @@ const uploadFotoPerfil = async (req, res) => {
     }
 };
 exports.uploadFotoPerfil = uploadFotoPerfil;
+// ✅ Obtener empresas asignadas a un ejecutivo
+const getEjecutivoEmpresas = async (req, res) => {
+    try {
+        const { ejecutivoId } = req.params;
+        // Verificar que el ejecutivo exista
+        const ejecutivo = await user_model_1.User.findById(ejecutivoId);
+        if (!ejecutivo) {
+            return res.status(404).json({ message: 'Ejecutivo no encontrado' });
+        }
+        if (ejecutivo.rol !== 'ejecutivo') {
+            return res.status(400).json({ message: 'El usuario no es un ejecutivo' });
+        }
+        // Buscar empresas que tengan este ejecutivo asignado
+        const { Empresa } = require('../models/empresa.model');
+        const empresas = await Empresa.find({
+            ejecutivos: ejecutivo._id,
+            activo: true
+        }).select('nombre email telefono direccion experiencia fotoPerfil');
+        res.status(200).json({
+            ejecutivo: {
+                _id: ejecutivo._id,
+                nombre: ejecutivo.nombre,
+                apellido: ejecutivo.apellido,
+                email: ejecutivo.email,
+                telefono: ejecutivo.telefono,
+                rol: ejecutivo.rol
+            },
+            empresas
+        });
+    }
+    catch (err) {
+        console.error('❌ Error obteniendo empresas del ejecutivo:', err);
+        res.status(500).json({ message: 'Error obteniendo empresas del ejecutivo' });
+    }
+};
+exports.getEjecutivoEmpresas = getEjecutivoEmpresas;

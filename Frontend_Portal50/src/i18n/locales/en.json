@@ -1,0 +1,122 @@
+{
+  "header": {
+    "login": "Login",
+    "register": "Register",
+    "dashboard": "Dashboard",
+    "company_dashboard": "Company Dashboard",
+    "settings": "Settings",
+    "logout": "Logout",
+    "hire": "I Want to Hire",
+    "work": "I Want to Work",
+    "learn": "I Want to Learn",
+    "status": "Status",
+    "profile_photo": "Profile Photo",
+    "available": "available",
+    "with_conditions": "with conditions",
+    "not_available": "not available"
+  },
+  "navigation": {
+    "home": "Home",
+    "learn": "I Want to Learn",
+    "work": "I Want to Work",
+    "hire": "I Want to Hire"
+  },
+  "home": {
+    "hero_title": "Portal50+",
+    "hero_subtitle": "The leading platform for professionals over 50",
+    "hero_description": "Connect with job opportunities, learn new skills and find your next professional challenge.",
+    "get_started": "Get Started",
+    "learn_more": "Learn More"
+  },
+  "courses": {
+    "title": "Portal50+ Courses",
+    "subtitle": "Discover courses taught by experienced professionals. Learn new skills and boost your career.",
+    "search_placeholder": "Search courses...",
+    "all_categories": "All categories",
+    "most_relevant": "Most relevant",
+    "most_recent": "Most recent",
+    "best_rated": "Best rated",
+    "lowest_price": "Lowest price",
+    "highest_price": "Highest price",
+    "search": "Search",
+    "clear": "Clear",
+    "loading": "Loading courses...",
+    "no_courses_found": "No courses found",
+    "adjust_filters": "Try adjusting your search filters",
+    "instructor": "Instructor",
+    "per_month": "per month",
+    "view_course": "View course",
+    "duration": "duration"
+  },
+  "categories": {
+    "programming": "Programming",
+    "marketing": "Marketing",
+    "data_science": "Data Science",
+    "design": "Design",
+    "business": "Business",
+    "languages": "Languages"
+  },
+  "jobs": {
+    "title": "Job Offers",
+    "search_placeholder": "Search jobs...",
+    "location": "Location",
+    "category": "Category",
+    "filter": "Filter",
+    "view_offer": "View offer",
+    "apply": "Apply",
+    "salary": "Salary",
+    "company": "Company"
+  },
+  "auth": {
+    "login_title": "Log In",
+    "register_title": "Sign Up",
+    "email": "Email",
+    "password": "Password",
+    "name": "Name",
+    "phone": "Phone",
+    "role": "Role",
+    "professional": "Professional",
+    "company": "Company",
+    "login_button": "Log in",
+    "register_button": "Sign up",
+    "forgot_password": "Forgot your password?",
+    "no_account": "Don't have an account?",
+    "have_account": "Already have an account?"
+  },
+  "company": {
+    "register_title": "Company Registration",
+    "company_name": "Company name",
+    "website": "Website",
+    "country": "Country",
+    "register_button": "Register company"
+  },
+  "dashboard": {
+    "welcome": "Welcome",
+    "my_profile": "My Profile",
+    "my_applications": "My Applications",
+    "my_courses": "My Courses",
+    "generate_cv": "Generate CV"
+  },
+  "footer": {
+    "about": "About",
+    "contact": "Contact",
+    "privacy": "Privacy",
+    "terms": "Terms",
+    "all_rights_reserved": "All rights reserved"
+  },
+  "common": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "edit": "Edit",
+    "delete": "Delete",
+    "view": "View",
+    "back": "Back",
+    "next": "Next",
+    "previous": "Previous",
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success",
+    "warning": "Warning",
+    "info": "Information"
+  }
+}

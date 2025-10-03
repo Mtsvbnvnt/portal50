@@ -13,6 +13,10 @@ const adminfraccional_controller_1 = require("../controllers/adminfraccional.con
 const router = (0, express_1.Router)();
 // Crear usuario admin-fraccional (solo para uso interno/admin)
 router.post('/adminfraccional', adminfraccional_controller_1.crearAdminFraccional);
+// Obtener lista de ejecutivos (solo para admin-fraccional)
+router.get('/ejecutivos', adminfraccional_controller_1.obtenerEjecutivos);
+// Obtener empresas asignadas a un ejecutivo
+router.get('/ejecutivo/:ejecutivoId/empresas', user_controller_1.getEjecutivoEmpresas);
 /**
  * @swagger
  * /api/users/uid/{uid}:

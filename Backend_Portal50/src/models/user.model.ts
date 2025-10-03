@@ -3,6 +3,7 @@ import { Schema, model, Document } from 'mongoose';
 export interface IUser extends Document {
   uid: string;
   nombre: string;
+  apellido?: string;
   email: string;
   rol: string;
   telefono?: string;
@@ -18,11 +19,14 @@ export interface IUser extends Document {
   isEjecutivo?: boolean;
   fotoPerfil?: string;
   disponibilidad?: string;
+  empresaAsignada?: Schema.Types.ObjectId;
+  empresasAsignadas?: Schema.Types.ObjectId[]; // Array para múltiples empresas
 }
 
 const userSchema = new Schema<IUser>({
   uid: { type: String, required: true, unique: true },
   nombre: { type: String, required: true },
+  apellido: String,
   email: { type: String, required: true },
   rol: String,
   telefono: String,
@@ -57,7 +61,9 @@ const userSchema = new Schema<IUser>({
     type: String,
     enum: ['disponible', 'con condiciones', 'no disponible'],
     default: 'disponible'
-  }
+  },
+  empresaAsignada: { type: Schema.Types.ObjectId, ref: 'Empresa' },
+  empresasAsignadas: [{ type: Schema.Types.ObjectId, ref: 'Empresa' }] // Array para múltiples empresas
 });
 
 export const User = model<IUser>('User', userSchema, 'usuarios');

@@ -5,12 +5,14 @@ import { LiaChartPieSolid, LiaCogSolid, LiaTimesSolid } from "react-icons/lia";
 import { FaUserCircle } from "react-icons/fa";
 import { UserContext } from "../context/UserContext";
 import { getApiUrl } from "../config/api";
+import { useTranslation } from 'react-i18next';
+import LanguageSelector from './LanguageSelector';
 
 export default function Header() {
   const navigate = useNavigate();
   const { user, setUser } = useContext(UserContext);
-  const [esEjecutivo, setEsEjecutivo] = useState(false);
   const [imgError, setImgError] = useState(false);
+  const { t } = useTranslation();
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(async (firebaseUser) => {
@@ -46,21 +48,6 @@ export default function Header() {
 
           setUser(finalUser);
           localStorage.setItem("user", JSON.stringify(finalUser));
-
-          if (data.rol === "profesional") {
-            const empresasRes = await fetch(getApiUrl('/api/empresas/activas'), {
-              headers: { Authorization: `Bearer ${idToken}` },
-            });
-            if (empresasRes.ok) {
-              const empresas = await empresasRes.json();
-              const found = empresas.some((e: any) =>
-                (e.ejecutivos || []).some((ej: any) => ej._id === data._id)
-              );
-              setEsEjecutivo(found);
-            }
-          } else {
-            setEsEjecutivo(false);
-          }
         } else {
           setUser(null);
           localStorage.removeItem("user");
@@ -68,7 +55,6 @@ export default function Header() {
       } else {
         setUser(null);
         localStorage.removeItem("user");
-        setEsEjecutivo(false);
       }
     });
 
@@ -83,7 +69,6 @@ export default function Header() {
     auth.signOut();
     localStorage.removeItem("user");
     setUser(null);
-    setEsEjecutivo(false);
     navigate("/");
   };
 
@@ -118,27 +103,27 @@ export default function Header() {
 
         {/* CENTRO */}
         <nav className="flex-1 flex flex-wrap justify-center space-x-2 md:space-x-6 text-base md:text-lg">
-          <Link to="/" className="hover:text-blue-600">Inicio</Link>
+          <Link to="/" className="hover:text-blue-600">{t('navigation.home')}</Link>
           {/* Empresa: Quiero contratar y Quiero aprender */}
           {user?.rol === "empresa" && (
             <>
-              <Link to="/quiero-contratar" className="hover:text-blue-600">Quiero Contratar</Link>
-              <Link to="/aprender" className="hover:text-blue-600">Quiero Aprender</Link>
+              <Link to="/quiero-contratar" className="hover:text-blue-600">{t('header.hire')}</Link>
+              <Link to="/aprender" className="hover:text-blue-600">{t('header.learn')}</Link>
             </>
           )}
           {/* Trabajador: Quiero trabajar y Quiero aprender */}
           {(user?.rol === "profesional" || user?.rol === "profesional-ejecutivo") && (
             <>
-              <Link to="/trabajar" className="hover:text-blue-600">Quiero Trabajar</Link>
-              <Link to="/aprender" className="hover:text-blue-600">Quiero Aprender</Link>
+              <Link to="/trabajar" className="hover:text-blue-600">{t('header.work')}</Link>
+              <Link to="/aprender" className="hover:text-blue-600">{t('header.learn')}</Link>
             </>
           )}
           {/* Invitado: muestra ambos */}
           {!user && (
             <>
-              <Link to="/quiero-contratar" className="hover:text-blue-600">Quiero Contratar</Link>
-              <Link to="/trabajar" className="hover:text-blue-600">Quiero Trabajar</Link>
-              <Link to="/aprender" className="hover:text-blue-600">Quiero Aprender</Link>
+              <Link to="/quiero-contratar" className="hover:text-blue-600">{t('header.hire')}</Link>
+              <Link to="/trabajar" className="hover:text-blue-600">{t('header.work')}</Link>
+              <Link to="/aprender" className="hover:text-blue-600">{t('header.learn')}</Link>
             </>
           )}
         </nav>
@@ -153,7 +138,7 @@ export default function Header() {
                   <div
                     className={`w-3.5 h-3.5 rounded-full mr-1 shadow-md transition-all duration-200 
                     ${getDisponibilidadColor(user.disponibilidad)} `}
-                    title={`Estado: ${user.disponibilidad}`}
+                    title={`${t('header.status')}: ${user.disponibilidad}`}
                   />
                 )}
 
@@ -161,7 +146,7 @@ export default function Header() {
                 {user.fotoPerfil && typeof user.fotoPerfil === "string" && user.fotoPerfil.trim() !== "" && !user.fotoPerfil.includes("undefined") && !imgError ? (
                   <img
                     src={user.fotoPerfil}
-                    alt="Foto Perfil"
+                    alt={t('header.profile_photo')}
                     onError={() => setImgError(true)}
                     className="inline-block w-10 h-10 rounded-full object-cover border-2 border-blue-500 shadow"
                   />
@@ -180,31 +165,53 @@ export default function Header() {
                 {user.rol === "profesional" && (
                   <Link to="/dashboard" className="px-4 py-2 hover:bg-gray-200 flex items-center">
                     <LiaChartPieSolid className="mr-2" />
-                    <span>Dashboard</span>
+                    <span>{t('header.dashboard')}</span>
                   </Link>
                 )}
-                {(user.rol === "empresa" || esEjecutivo) && (
+                {user.rol === "empresa" && (
                   <Link to="/empresa" className="px-4 py-2 hover:bg-gray-200 flex items-center">
                     <LiaChartPieSolid className="mr-2" />
-                    <span>Dashboard Empresa</span>
+                    <span>{t('header.company_dashboard')}</span>
+                  </Link>
+                )}
+                {user.rol === "ejecutivo" && (
+                  <>
+                    <Link to="/ejecutivo" className="px-4 py-2 hover:bg-gray-200 flex items-center">
+                      <LiaChartPieSolid className="mr-2" />
+                      <span>Panel Ejecutivo</span>
+                    </Link>
+                    <Link to="/empresa" className="px-4 py-2 hover:bg-gray-200 flex items-center">
+                      <LiaChartPieSolid className="mr-2" />
+                      <span>{t('header.company_dashboard')}</span>
+                    </Link>
+                  </>
+                )}
+                {user.rol === "admin-fraccional" && (
+                  <Link to="/admin-fraccional" className="px-4 py-2 hover:bg-gray-200 flex items-center">
+                    <LiaChartPieSolid className="mr-2" />
+                    <span>Panel Admin</span>
                   </Link>
                 )}
                 <Link to="/configuracion" className="px-4 py-2 hover:bg-gray-200 flex items-center">
                   <LiaCogSolid className="mr-2" />
-                  <span>Configuración</span>
+                  <span>{t('header.settings')}</span>
                 </Link>
                 <button
                   onClick={handleSignOut}
                   className="w-full text-left px-4 py-2 hover:bg-red-100 text-red-600 flex items-center"
                 >
                   <LiaTimesSolid className="text-red-500 text-sm mr-2" />
-                  <span>Cerrar sesión</span>
+                  <span>{t('header.logout')}</span>
                 </button>
+                <div className="border-t border-gray-200 p-2">
+                  <LanguageSelector />
+                </div>
               </div>
             </div>
           ) : (
-            <div className="space-x-4">
-              <Link to="/login" className="hover:text-blue-600">Iniciar Sesión</Link>
+            <div className="flex items-center space-x-4">
+              <LanguageSelector />
+              <Link to="/login" className="hover:text-blue-600">{t('header.login')}</Link>
             </div>
           )}
         </div>

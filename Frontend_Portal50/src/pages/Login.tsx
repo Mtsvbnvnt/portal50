@@ -2,11 +2,12 @@ import { useState, useContext } from "react";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../firebase";
 import { useNavigate } from "react-router-dom";
-import { AuthContext } from "../context/AuthContext";
+import { UserContext } from "../context/UserContext";
+import { getApiUrl } from "../config/api";
 
 export default function Login() {
   const navigate = useNavigate();
-  const { setUser } = useContext(AuthContext);
+  const { setUser } = useContext(UserContext);
 
   const [email, setEmail] = useState("");
   const [pass, setPass] = useState("");
@@ -33,7 +34,7 @@ export default function Login() {
       const idToken = await cred.user.getIdToken();
       const uid = cred.user.uid;
 
-      let res = await fetch(`http://localhost:3000/api/users/uid/${uid}`, {
+      let res = await fetch(getApiUrl(`/api/users/uid/${uid}`), {
         headers: { Authorization: `Bearer ${idToken}` },
       });
 
@@ -41,7 +42,7 @@ export default function Login() {
       if (res.ok) {
         data = await res.json();
       } else {
-        res = await fetch(`http://localhost:3000/api/empresas/uid/${uid}`, {
+        res = await fetch(getApiUrl(`/api/empresas/uid/${uid}`), {
           headers: { Authorization: `Bearer ${idToken}` },
         });
         if (!res.ok) throw new Error("No se encontró el perfil en ninguna colección");
@@ -53,7 +54,28 @@ export default function Login() {
       setUser(data);
 
       setSuccess(true);
-      setTimeout(() => navigate("/", { state: { loginSuccess: true } }), 1000);
+      
+      // Redirección basada en el rol del usuario
+      let redirectPath = "/";
+      switch (data.rol) {
+        case "admin-fraccional":
+          redirectPath = "/admin-fraccional";
+          break;
+        case "empresa":
+          redirectPath = "/empresa";
+          break;
+        case "ejecutivo":
+          redirectPath = "/ejecutivo";
+          break;
+        case "profesional":
+        case "profesional-ejecutivo":
+          redirectPath = "/dashboard";
+          break;
+        default:
+          redirectPath = "/";
+      }
+      
+      setTimeout(() => navigate(redirectPath, { state: { loginSuccess: true } }), 1000);
     } catch (err) {
       console.error(err);
       setError("Credenciales incorrectas o usuario no existe.");

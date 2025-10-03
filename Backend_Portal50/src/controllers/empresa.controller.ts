@@ -36,7 +36,7 @@ export const createEmpresa = async (req: Request, res: Response) => {
 export const getEmpresaByUid = async (req: Request, res: Response) => {
   try {
     const empresa = await Empresa.findOne({ uid: req.params.uid, activo: true })
-      .populate('ejecutivos', 'nombre email rol telefono uid');
+      .populate('ejecutivos', 'nombre apellido email rol telefono uid');
     if (!empresa) return res.status(404).json({ message: 'Empresa no encontrada' });
 
     res.status(200).json(empresa);
@@ -64,7 +64,7 @@ export const addEjecutivo = async (req: Request, res: Response) => {
       empresaId,
       { $addToSet: { ejecutivos: user._id } },
       { new: true }
-    ).populate('ejecutivos', 'nombre email rol telefono uid');
+    ).populate('ejecutivos', 'nombre apellido email rol telefono uid');
 
     if (!empresa) return res.status(404).json({ message: 'Empresa no encontrada' });
 
@@ -92,7 +92,7 @@ export const updateEjecutivo = async (req: Request, res: Response) => {
         empresaId,
         { $pull: { ejecutivos: user._id } },
         { new: true }
-      ).populate('ejecutivos', 'nombre email rol telefono uid');
+      ).populate('ejecutivos', 'nombre apellido email rol telefono uid');
 
       await User.findByIdAndUpdate(user._id, { isEjecutivo: false });
 
@@ -150,7 +150,7 @@ export const desactivarEmpresa = async (req: Request, res: Response) => {
 export const getEmpresasActivas = async (_req: Request, res: Response) => {
   try {
     const empresas = await Empresa.find({ activo: true })
-      .populate('ejecutivos', 'nombre email rol telefono uid fotoPerfil');
+      .populate('ejecutivos', 'nombre apellido email rol telefono uid fotoPerfil');
 
     res.status(200).json(empresas);
   } catch (error) {
@@ -227,5 +227,105 @@ export const updateEmpresa = async (req: Request, res: Response) => {
   } catch (err) {
     console.error("❌ Error actualizando empresa:", err);
     return res.status(500).json({ message: "Error al actualizar empresa" });
+  }
+};
+
+// ✅ Asignar ejecutivo por ID de MongoDB (nuevo)
+export const asignarEjecutivo = async (req: Request, res: Response) => {
+  try {
+    const { empresaId } = req.params;
+    const { ejecutivoId } = req.body;
+
+    // Verificar que el ejecutivo exista y tenga el rol correcto
+    const ejecutivo = await User.findById(ejecutivoId);
+    if (!ejecutivo) {
+      return res.status(404).json({ message: 'Ejecutivo no encontrado' });
+    }
+
+    if (ejecutivo.rol !== 'ejecutivo') {
+      return res.status(400).json({ message: 'El usuario seleccionado no es un ejecutivo' });
+    }
+
+    // Verificar que el ejecutivo no esté ya asignado a esta empresa específica
+    const empresaConEjecutivo = await Empresa.findOne({ 
+      _id: empresaId,
+      ejecutivos: ejecutivo._id,
+      activo: true 
+    });
+    
+    if (empresaConEjecutivo) {
+      return res.status(400).json({ 
+        message: `El ejecutivo ya está asignado a esta empresa` 
+      });
+    }
+
+    // Asignar ejecutivo a la empresa
+    const empresa = await Empresa.findByIdAndUpdate(
+      empresaId,
+      { $addToSet: { ejecutivos: ejecutivo._id } },
+      { new: true }
+    ).populate('ejecutivos', 'nombre apellido email telefono uid');
+
+    if (!empresa) {
+      return res.status(404).json({ message: 'Empresa no encontrada' });
+    }
+
+    // Marcar al ejecutivo como asignado a esta empresa
+    await User.findByIdAndUpdate(ejecutivo._id, { 
+      $addToSet: { empresasAsignadas: empresa._id },
+      isEjecutivo: true 
+    });
+
+    res.status(200).json({ 
+      message: 'Ejecutivo asignado exitosamente', 
+      empresa 
+    });
+  } catch (err) {
+    console.error('❌ Error asignando ejecutivo:', err);
+    res.status(500).json({ message: 'Error asignando ejecutivo' });
+  }
+};
+
+// ✅ Desasignar ejecutivo de una empresa específica
+export const desasignarEjecutivo = async (req: Request, res: Response) => {
+  try {
+    const { empresaId } = req.params;
+    const { ejecutivoId } = req.body;
+
+    // Verificar que el ejecutivo exista
+    const ejecutivo = await User.findById(ejecutivoId);
+    if (!ejecutivo) {
+      return res.status(404).json({ message: 'Ejecutivo no encontrado' });
+    }
+
+    // Remover ejecutivo de la empresa
+    const empresa = await Empresa.findByIdAndUpdate(
+      empresaId,
+      { $pull: { ejecutivos: ejecutivo._id } },
+      { new: true }
+    ).populate('ejecutivos', 'nombre apellido email telefono uid');
+
+    if (!empresa) {
+      return res.status(404).json({ message: 'Empresa no encontrada' });
+    }
+
+    // Remover empresa del array de empresas asignadas del ejecutivo
+    await User.findByIdAndUpdate(ejecutivo._id, { 
+      $pull: { empresasAsignadas: empresa._id }
+    });
+
+    // Si el ejecutivo ya no tiene empresas asignadas, remover isEjecutivo
+    const ejecutivoActualizado = await User.findById(ejecutivo._id);
+    if (!ejecutivoActualizado?.empresasAsignadas || ejecutivoActualizado.empresasAsignadas.length === 0) {
+      await User.findByIdAndUpdate(ejecutivo._id, { isEjecutivo: false });
+    }
+
+    res.status(200).json({ 
+      message: 'Ejecutivo desasignado exitosamente', 
+      empresa 
+    });
+  } catch (err) {
+    console.error('❌ Error desasignando ejecutivo:', err);
+    res.status(500).json({ message: 'Error desasignando ejecutivo' });
   }
 };

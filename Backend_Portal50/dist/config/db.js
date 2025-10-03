@@ -11,8 +11,19 @@ const connectDB = async () => {
             console.warn("⚠️ No se encontró MONGO_URL, API funcionará sin base de datos");
             return;
         }
-        await mongoose_1.default.connect(MONGO_URL);
-        console.log("✅ Conectado a MongoDB en Railway");
+        // Configuración para conexión externa/remota
+        const options = {
+            useNewUrlParser: true,
+            useUnifiedTopology: true,
+            maxPoolSize: 10, // Mantener hasta 10 conexiones en el pool
+            serverSelectionTimeoutMS: 5000, // Timeout después de 5s en lugar de 30s por defecto
+            socketTimeoutMS: 45000, // Cerrar sockets después de 45s de inactividad
+            bufferMaxEntries: 0, // Deshabilitar mongoose buffering
+            bufferCommands: false, // Deshabilitar mongoose buffering
+        };
+        await mongoose_1.default.connect(MONGO_URL, options);
+        console.log("✅ Conectado a MongoDB - Acceso remoto habilitado");
+        console.log("🌐 Base de datos accesible vía IP externa");
     }
     catch (error) {
         console.error("❌ Error conectando a MongoDB:", error);

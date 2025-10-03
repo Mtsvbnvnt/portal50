@@ -5,6 +5,7 @@ const mongoose_1 = require("mongoose");
 const userSchema = new mongoose_1.Schema({
     uid: { type: String, required: true, unique: true },
     nombre: { type: String, required: true },
+    apellido: String,
     email: { type: String, required: true },
     rol: String,
     telefono: String,
@@ -39,6 +40,8 @@ const userSchema = new mongoose_1.Schema({
         type: String,
         enum: ['disponible', 'con condiciones', 'no disponible'],
         default: 'disponible'
-    }
+    },
+    empresaAsignada: { type: mongoose_1.Schema.Types.ObjectId, ref: 'Empresa' },
+    empresasAsignadas: [{ type: mongoose_1.Schema.Types.ObjectId, ref: 'Empresa' }] // Array para múltiples empresas
 });
 exports.User = (0, mongoose_1.model)('User', userSchema, 'usuarios');

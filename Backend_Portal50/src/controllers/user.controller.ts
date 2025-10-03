@@ -176,3 +176,42 @@ export const uploadFotoPerfil = async (req: Request, res: Response) => {
   }
 };
 
+// ✅ Obtener empresas asignadas a un ejecutivo
+export const getEjecutivoEmpresas = async (req: Request, res: Response) => {
+  try {
+    const { ejecutivoId } = req.params;
+
+    // Verificar que el ejecutivo exista
+    const ejecutivo = await User.findById(ejecutivoId);
+    if (!ejecutivo) {
+      return res.status(404).json({ message: 'Ejecutivo no encontrado' });
+    }
+
+    if (ejecutivo.rol !== 'ejecutivo') {
+      return res.status(400).json({ message: 'El usuario no es un ejecutivo' });
+    }
+
+    // Buscar empresas que tengan este ejecutivo asignado
+    const { Empresa } = require('../models/empresa.model');
+    const empresas = await Empresa.find({ 
+      ejecutivos: ejecutivo._id,
+      activo: true 
+    }).select('nombre email telefono direccion experiencia fotoPerfil');
+
+    res.status(200).json({
+      ejecutivo: {
+        _id: ejecutivo._id,
+        nombre: ejecutivo.nombre,
+        apellido: ejecutivo.apellido,
+        email: ejecutivo.email,
+        telefono: ejecutivo.telefono,
+        rol: ejecutivo.rol
+      },
+      empresas
+    });
+  } catch (err) {
+    console.error('❌ Error obteniendo empresas del ejecutivo:', err);
+    res.status(500).json({ message: 'Error obteniendo empresas del ejecutivo' });
+  }
+};
+

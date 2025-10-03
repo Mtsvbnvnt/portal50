@@ -1,0 +1,122 @@
+{
+  "header": {
+    "login": "Iniciar sesión",
+    "register": "Registrarse",
+    "dashboard": "Dashboard",
+    "company_dashboard": "Dashboard Empresa",
+    "settings": "Configuración",
+    "logout": "Cerrar sesión",
+    "hire": "Quiero Contratar",
+    "work": "Quiero Trabajar",
+    "learn": "Quiero Aprender",
+    "status": "Estado",
+    "profile_photo": "Foto de Perfil",
+    "available": "disponible",
+    "with_conditions": "con condiciones",
+    "not_available": "no disponible"
+  },
+  "navigation": {
+    "home": "Inicio",
+    "learn": "Quiero Aprender",
+    "work": "Quiero Trabajar",
+    "hire": "Quiero Contratar"
+  },
+  "home": {
+    "hero_title": "Portal50+",
+    "hero_subtitle": "La plataforma líder para profesionales mayores de 50 años",
+    "hero_description": "Conecta con oportunidades laborales, aprende nuevas habilidades y encuentra tu próximo desafío profesional.",
+    "get_started": "Comenzar",
+    "learn_more": "Saber más"
+  },
+  "courses": {
+    "title": "Cursos Portal50+",
+    "subtitle": "Descubre cursos impartidos por profesionales experimentados. Aprende nuevas habilidades y potencia tu carrera.",
+    "search_placeholder": "Buscar cursos...",
+    "all_categories": "Todas las categorías",
+    "most_relevant": "Más relevantes",
+    "most_recent": "Más recientes",
+    "best_rated": "Mejor valorados",
+    "lowest_price": "Precio menor",
+    "highest_price": "Precio mayor",
+    "search": "Buscar",
+    "clear": "Limpiar",
+    "loading": "Cargando cursos...",
+    "no_courses_found": "No se encontraron cursos",
+    "adjust_filters": "Intenta ajustar tus filtros de búsqueda",
+    "instructor": "Instructor",
+    "per_month": "por mes",
+    "view_course": "Ver curso",
+    "duration": "duración"
+  },
+  "categories": {
+    "programming": "Programación",
+    "marketing": "Marketing",
+    "data_science": "Data Science",
+    "design": "Diseño",
+    "business": "Negocios",
+    "languages": "Idiomas"
+  },
+  "jobs": {
+    "title": "Ofertas de Trabajo",
+    "search_placeholder": "Buscar ofertas...",
+    "location": "Ubicación",
+    "category": "Categoría",
+    "filter": "Filtrar",
+    "view_offer": "Ver oferta",
+    "apply": "Postular",
+    "salary": "Salario",
+    "company": "Empresa"
+  },
+  "auth": {
+    "login_title": "Iniciar Sesión",
+    "register_title": "Registrarse",
+    "email": "Correo electrónico",
+    "password": "Contraseña",
+    "name": "Nombre",
+    "phone": "Teléfono",
+    "role": "Rol",
+    "professional": "Profesional",
+    "company": "Empresa",
+    "login_button": "Iniciar sesión",
+    "register_button": "Registrarse",
+    "forgot_password": "¿Olvidaste tu contraseña?",
+    "no_account": "¿No tienes cuenta?",
+    "have_account": "¿Ya tienes cuenta?"
+  },
+  "company": {
+    "register_title": "Registro de Empresa",
+    "company_name": "Nombre de la empresa",
+    "website": "Sitio web",
+    "country": "País",
+    "register_button": "Registrar empresa"
+  },
+  "dashboard": {
+    "welcome": "Bienvenido",
+    "my_profile": "Mi Perfil",
+    "my_applications": "Mis Postulaciones",
+    "my_courses": "Mis Cursos",
+    "generate_cv": "Generar CV"
+  },
+  "footer": {
+    "about": "Acerca de",
+    "contact": "Contacto",
+    "privacy": "Privacidad",
+    "terms": "Términos",
+    "all_rights_reserved": "Todos los derechos reservados"
+  },
+  "common": {
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "edit": "Editar",
+    "delete": "Eliminar",
+    "view": "Ver",
+    "back": "Volver",
+    "next": "Siguiente",
+    "previous": "Anterior",
+    "loading": "Cargando...",
+    "error": "Error",
+    "success": "Éxito",
+    "warning": "Advertencia",
+    "info": "Información"
+  }
+}
