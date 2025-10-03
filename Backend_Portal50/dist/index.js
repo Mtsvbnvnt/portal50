@@ -97,3 +97,5 @@ app.use('/api/docs', swagger_ui_express_1.default.serve, swagger_ui_express_1.de
         console.log(`🌐 Acceso externo habilitado`);
     });
 });
+// Export para uso en Vercel
+exports.default = app;

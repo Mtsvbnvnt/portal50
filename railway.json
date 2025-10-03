@@ -1,0 +1,9 @@
+{
+  "build": {
+    "builder": "NIXPACKS"
+  },
+  "deploy": {
+    "startCommand": "cd Backend_Portal50 && npm start",
+    "healthcheckPath": "/ping"
+  }
+}

@@ -3,7 +3,24 @@
   "outputDirectory": "Frontend_Portal50/dist",
   "cleanUrls": true,
   "trailingSlash": false,
+  "env": {
+    "VITE_API_URL": "@portal50_api_url"
+  },
+  "build": {
+    "env": {
+      "VITE_API_URL": "@portal50_api_url"
+    }
+  },
+  "functions": {
+    "Backend_Portal50/src/index.ts": {
+      "runtime": "@vercel/node"
+    }
+  },
   "rewrites": [
+    {
+      "source": "/api/(.*)",
+      "destination": "/Backend_Portal50/src/index.ts"
+    },
     {
       "source": "/(.*)",
       "destination": "/index.html"

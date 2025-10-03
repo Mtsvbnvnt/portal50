@@ -105,3 +105,6 @@ connectDB().then(() => {
     console.log(`🌐 Acceso externo habilitado`);
   });
 });
+
+// Export para uso en Vercel
+export default app;
