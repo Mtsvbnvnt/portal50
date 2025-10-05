@@ -7,9 +7,9 @@ echo "🚀 Configurando variables de entorno para Portal50+ en Vercel..."
 
 # MongoDB Atlas
 echo "📊 Configurando MongoDB Atlas..."
-echo "mongodb+srv://Vercel-Admin-portal50:JOu3jCDkYejXdKDd@portal50.dqvxnvv.mongodb.net/" | vercel env add MONGO_URL production
-echo "mongodb+srv://Vercel-Admin-portal50:JOu3jCDkYejXdKDd@portal50.dqvxnvv.mongodb.net/" | vercel env add MONGO_URL preview
-echo "mongodb+srv://Vercel-Admin-portal50:JOu3jCDkYejXdKDd@portal50.dqvxnvv.mongodb.net/" | vercel env add MONGO_URL development
+echo "mongodb+srv://Vercel-Admin-portal50:pbSa6lVNj6f4SiYW@portal50.dqvxnvv.mongodb.net/?retryWrites=true&w=majority" | vercel env add MONGO_URL production
+echo "mongodb+srv://Vercel-Admin-portal50:pbSa6lVNj6f4SiYW@portal50.dqvxnvv.mongodb.net/?retryWrites=true&w=majority" | vercel env add MONGO_URL preview
+echo "mongodb+srv://Vercel-Admin-portal50:pbSa6lVNj6f4SiYW@portal50.dqvxnvv.mongodb.net/?retryWrites=true&w=majority" | vercel env add MONGO_URL development
 
 # Node Environment
 echo "⚙️ Configurando NODE_ENV..."

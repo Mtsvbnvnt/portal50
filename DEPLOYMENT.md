@@ -7,7 +7,7 @@
 Tu proyecto necesita estas variables de entorno en Vercel:
 
 ```bash
-MONGO_URL=mongodb+srv://Vercel-Admin-portal50:JOu3jCDkYejXdKDd@portal50.dqvxnvv.mongodb.net/
+MONGO_URL=mongodb+srv://Vercel-Admin-portal50:pbSa6lVNj6f4SiYW@portal50.dqvxnvv.mongodb.net/?retryWrites=true&w=majority
 NODE_ENV=production
 PORT=3000
 ```
@@ -37,7 +37,7 @@ chmod +x setup-vercel-env.sh
 
 | Name | Value | Environments |
 |------|-------|-------------|
-| `MONGO_URL` | `mongodb+srv://Vercel-Admin-portal50:JOu3jCDkYejXdKDd@portal50.dqvxnvv.mongodb.net/` | Production, Preview, Development |
+| `MONGO_URL` | `mongodb+srv://Vercel-Admin-portal50:pbSa6lVNj6f4SiYW@portal50.dqvxnvv.mongodb.net/?retryWrites=true&w=majority` | Production, Preview, Development |
 | `NODE_ENV` | `production` | Production |
 | `NODE_ENV` | `preview` | Preview |
 | `NODE_ENV` | `development` | Development |
@@ -87,7 +87,7 @@ vercel --prod
 **Problema**: Credenciales incorrectas
 **Solución**: Verifica que la URL sea exactamente:
 ```
-mongodb+srv://Vercel-Admin-portal50:JOu3jCDkYejXdKDd@portal50.dqvxnvv.mongodb.net/
+mongodb+srv://Vercel-Admin-portal50:pbSa6lVNj6f4SiYW@portal50.dqvxnvv.mongodb.net/?retryWrites=true&w=majority
 ```
 
 ### Error: Function timeout

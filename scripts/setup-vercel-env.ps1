@@ -5,7 +5,7 @@ Write-Host "🚀 Configurando variables de entorno para Portal50+ en Vercel..." 
 
 # MongoDB Atlas
 Write-Host "📊 Configurando MongoDB Atlas..." -ForegroundColor Yellow
-$mongoUrl = "mongodb+srv://Vercel-Admin-portal50:JOu3jCDkYejXdKDd@portal50.dqvxnvv.mongodb.net/"
+$mongoUrl = "mongodb+srv://Vercel-Admin-portal50:pbSa6lVNj6f4SiYW@portal50.dqvxnvv.mongodb.net/?retryWrites=true&w=majority"
 
 # Configurar para Production
 Write-Host "Configurando MONGO_URL para Production..." -ForegroundColor Blue
