@@ -218,6 +218,13 @@ export default function Header() {
               <ThemeToggle />
               <LanguageSelector />
               <Link to="/login" className="hover:text-blue-600 dark:hover:text-blue-400">{t('header.login')}</Link>
+              <Link 
+                to="/admin" 
+                className="text-xs text-gray-500 dark:text-gray-400 hover:text-red-600 dark:hover:text-red-400 transition-colors"
+                title="Acceso administrativo"
+              >
+                🔐
+              </Link>
             </div>
           )}
         </div>

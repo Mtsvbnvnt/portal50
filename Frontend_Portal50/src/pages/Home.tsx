@@ -215,6 +215,23 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* Sección para administradores - discreta */}
+      <section className="py-8 bg-gray-50 dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center">
+            <p className="text-sm text-gray-500 dark:text-gray-400">
+              ¿Eres administrador o ejecutivo?{" "}
+              <Link 
+                to="/admin" 
+                className="text-red-600 dark:text-red-400 hover:underline font-medium"
+              >
+                Acceso administrativo
+              </Link>
+            </p>
+          </div>
+        </div>
+      </section>
     </main>
   );
 }

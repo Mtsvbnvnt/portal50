@@ -7,6 +7,7 @@ import AdminFraccional from "./pages/AdminFraccional";
 import EmpresaDetalle from "./pages/EmpresaDetalle";
 import EjecutivoPanel from "./pages/EjecutivoPanel";
 import Login from "./pages/Login";
+import AdminLogin from "./pages/AdminLogin";
 import Dashboard from "./pages/Dashboard";
 import RegisterSelector from "./pages/RegisterSelector";
 import RegisterEmpresa from "./pages/RegisterEmpresa";
@@ -26,6 +27,7 @@ import Aprender from "./pages/Aprender";
 import CursoDetalle from "./pages/CursoDetalle";
 import SubirCurso from "./pages/SubirCurso";
 import { AuthGuard } from "./router/guards/AuthGuard";
+import { AdminAuthGuard } from "./router/guards/AdminAuthGuard";
 
 
 export default function App() {
@@ -40,6 +42,7 @@ export default function App() {
              <Route path="/register-empresa" element={<RegisterEmpresa />} />
              <Route path="/register-usuario" element={<RegisterUsuario />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/admin" element={<AdminLogin />} />
             <Route path="/dashboard" element={
               <AuthGuard requiredRoles={['profesional', 'profesional-ejecutivo']}>
                 <Dashboard />
@@ -56,9 +59,9 @@ export default function App() {
               </AuthGuard>
             } />
             <Route path="/ejecutivo" element={
-              <AuthGuard requiredRoles={['ejecutivo']}>
+              <AdminAuthGuard requiredRoles={['ejecutivo']}>
                 <EjecutivoPanel />
-              </AuthGuard>
+              </AdminAuthGuard>
             } />
             <Route path="/quiero-contratar" element={<QuieroContratar />} />
             <Route path="/publicar-oferta" element={
@@ -101,14 +104,14 @@ export default function App() {
             } />
             <Route path="/aprender/curso/:id" element={<CursoDetalle />} />
             <Route path="/admin-fraccional" element={
-              <AuthGuard requiredRoles={['admin-fraccional']}>
+              <AdminAuthGuard requiredRoles={['admin-fraccional']}>
                 <AdminFraccional />
-              </AuthGuard>
+              </AdminAuthGuard>
             } />
             <Route path="/admin-fraccional/empresa/:empresaId" element={
-              <AuthGuard requiredRoles={['admin-fraccional']}>
+              <AdminAuthGuard requiredRoles={['admin-fraccional']}>
                 <EmpresaDetalle />
-              </AuthGuard>
+              </AdminAuthGuard>
             } />
           </Routes>
         </main>

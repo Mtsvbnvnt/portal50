@@ -1,7 +1,7 @@
 import { useState, useContext } from "react";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../firebase";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { UserContext } from "../context/UserContext";
 import { getApiUrl } from "../config/api";
 
@@ -13,51 +13,63 @@ export default function Login() {
   const [pass, setPass] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError("");
     setSuccess(false);
+    setLoading(true);
 
     if (!email || !pass) {
       setError("Por favor completa todos los campos.");
+      setLoading(false);
       return;
     }
 
     if (!email.includes("@")) {
       setError("El correo debe ser válido.");
+      setLoading(false);
       return;
     }
 
     try {
+      // Autenticación con Firebase
       const cred = await signInWithEmailAndPassword(auth, email, pass);
       const idToken = await cred.user.getIdToken();
       const uid = cred.user.uid;
 
+      // Buscar usuario en la base de datos
       let res = await fetch(getApiUrl(`/api/users/uid/${uid}`), {
         headers: { Authorization: `Bearer ${idToken}` },
       });
 
-      let data;
+      let userData;
       if (res.ok) {
-        data = await res.json();
+        userData = await res.json();
       } else {
+        // Si no se encuentra en usuarios, buscar en empresas
         res = await fetch(getApiUrl(`/api/empresas/uid/${uid}`), {
           headers: { Authorization: `Bearer ${idToken}` },
         });
-        if (!res.ok) throw new Error("No se encontró el perfil en ninguna colección");
-        data = await res.json();
-        if (!data.rol) data.rol = "empresa";
+        if (!res.ok) {
+          throw new Error("No se encontró el perfil del usuario");
+        }
+        userData = await res.json();
+        if (!userData.rol) userData.rol = "empresa";
       }
 
-      localStorage.setItem("user", JSON.stringify(data));
-      setUser(data);
+      // Guardar datos del usuario
+      localStorage.setItem("user", JSON.stringify(userData));
+      setUser(userData);
 
+      // Mostrar mensaje de éxito
       setSuccess(true);
+      setError(""); // Limpiar cualquier error previo
       
       // Redirección basada en el rol del usuario
-      let redirectPath = "/";
-      switch (data.rol) {
+      let redirectPath = "/dashboard"; // Por defecto dashboard
+      switch (userData.rol) {
         case "admin-fraccional":
           redirectPath = "/admin-fraccional";
           break;
@@ -69,16 +81,38 @@ export default function Login() {
           break;
         case "profesional":
         case "profesional-ejecutivo":
+        case "aprendiz":
           redirectPath = "/dashboard";
           break;
         default:
-          redirectPath = "/";
+          redirectPath = "/dashboard";
       }
       
-      setTimeout(() => navigate(redirectPath, { state: { loginSuccess: true } }), 1000);
-    } catch (err) {
-      console.error(err);
-      setError("Credenciales incorrectas o usuario no existe.");
+      // Redirección con delay para mostrar el mensaje de éxito
+      setTimeout(() => {
+        navigate(redirectPath, { state: { loginSuccess: true } });
+      }, 1500);
+
+    } catch (err: any) {
+      console.error("Error en login:", err);
+      setSuccess(false);
+      
+      // Manejo específico de errores
+      if (err.code === 'auth/user-not-found') {
+        setError("No existe una cuenta con este correo electrónico.");
+      } else if (err.code === 'auth/wrong-password') {
+        setError("Contraseña incorrecta.");
+      } else if (err.code === 'auth/invalid-email') {
+        setError("El formato del correo electrónico no es válido.");
+      } else if (err.code === 'auth/too-many-requests') {
+        setError("Demasiados intentos fallidos. Intenta de nuevo más tarde.");
+      } else if (err.message?.includes("perfil")) {
+        setError("Usuario autenticado pero perfil no encontrado. Contacta al administrador.");
+      } else {
+        setError("Error de conexión. Verifica tu internet e intenta nuevamente.");
+      }
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -109,11 +143,13 @@ export default function Login() {
         <form onSubmit={handleLogin} className="space-y-4">
           <input
             placeholder="Email"
+            type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             className={`w-full border p-3 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 ${
               error && !email ? "border-red-500 dark:border-red-400" : "border-gray-300 dark:border-gray-600"
             } focus:outline-none focus:ring-2 focus:ring-blue-300 dark:focus:ring-blue-500`}
+            disabled={loading}
           />
           <input
             placeholder="Contraseña"
@@ -123,13 +159,15 @@ export default function Login() {
             className={`w-full border p-3 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 ${
               error && !pass ? "border-red-500 dark:border-red-400" : "border-gray-300 dark:border-gray-600"
             } focus:outline-none focus:ring-2 focus:ring-blue-300 dark:focus:ring-blue-500`}
+            disabled={loading}
           />
 
           <button
             type="submit"
-            className="w-full bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-800 text-white py-2 rounded font-semibold transition duration-200"
+            className="w-full bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-800 text-white py-2 rounded font-semibold transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+            disabled={loading}
           >
-            Iniciar Sesión
+            {loading ? "Iniciando sesión..." : "Iniciar Sesión"}
           </button>
 
           {error && <p className="text-red-500 dark:text-red-400 text-sm">{error}</p>}
@@ -140,6 +178,19 @@ export default function Login() {
             ✅ Inicio de sesión exitoso. Redirigiendo...
           </div>
         )}
+
+        {/* Enlace al login administrativo */}
+        <div className="mt-6 pt-4 border-t border-gray-200 dark:border-gray-600 text-center">
+          <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
+            ¿Eres administrador o ejecutivo?
+          </p>
+          <Link
+            to="/admin"
+            className="text-red-600 dark:text-red-400 hover:underline text-sm font-medium"
+          >
+            Acceso administrativo
+          </Link>
+        </div>
       </div>
     </div>
   );
