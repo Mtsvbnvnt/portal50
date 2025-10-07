@@ -13,6 +13,7 @@ import mensajeRoutes from './routes/mensaje.routes';
 import adminRoutes from './routes/admin.routes';
 import evaluacionRoutes from './routes/evaluacion.routes';
 import empresaRoutes from './routes/empresa.routes';
+import solicitudEmpleoRoutes from './routes/solicitudEmpleo.routes';
 
 // Config
 import { swaggerSpec } from './config/swagger';
@@ -70,6 +71,7 @@ app.use('/api/mensajes', mensajeRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/evaluacion', evaluacionRoutes);
 app.use('/api/empresas', empresaRoutes);
+app.use('/api/solicitudes-empleo', solicitudEmpleoRoutes);
 app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 // Conectar a BD y iniciar servidor

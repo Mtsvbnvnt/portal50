@@ -17,6 +17,7 @@ const mensaje_routes_1 = __importDefault(require("./routes/mensaje.routes"));
 const admin_routes_1 = __importDefault(require("./routes/admin.routes"));
 const evaluacion_routes_1 = __importDefault(require("./routes/evaluacion.routes"));
 const empresa_routes_1 = __importDefault(require("./routes/empresa.routes"));
+const solicitudEmpleo_routes_1 = __importDefault(require("./routes/solicitudEmpleo.routes"));
 // Config
 const swagger_1 = require("./config/swagger");
 const db_1 = __importDefault(require("./config/db"));
@@ -66,6 +67,7 @@ app.use('/api/mensajes', mensaje_routes_1.default);
 app.use('/api/admin', admin_routes_1.default);
 app.use('/api/evaluacion', evaluacion_routes_1.default);
 app.use('/api/empresas', empresa_routes_1.default);
+app.use('/api/solicitudes-empleo', solicitudEmpleo_routes_1.default);
 app.use('/api/docs', swagger_ui_express_1.default.serve, swagger_ui_express_1.default.setup(swagger_1.swaggerSpec));
 // Conectar a BD y iniciar servidor
 (0, db_1.default)().then(() => {

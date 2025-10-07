@@ -1,10 +1,23 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { auth } from "../firebase";
 import { useNavigate } from "react-router-dom";
 import { getApiUrl } from "../config/api";
 
 export default function PublicarOferta() {
   const navigate = useNavigate();
+
+  // Verificar si es empresa y redirigir al formulario de solicitud
+  useEffect(() => {
+    const stored = localStorage.getItem("user");
+    if (stored) {
+      const user = JSON.parse(stored);
+      if (user.rol === "empresa") {
+        // Las empresas deben crear solicitudes, no publicar directamente
+        navigate("/empresa/crear-solicitud");
+        return;
+      }
+    }
+  }, [navigate]);
 
   const [titulo, setTitulo] = useState("");
   const [descripcion, setDescripcion] = useState("");

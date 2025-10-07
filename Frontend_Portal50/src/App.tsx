@@ -6,6 +6,8 @@ import Home from "./pages/Home";
 import AdminFraccional from "./pages/AdminFraccional";
 import EmpresaDetalle from "./pages/EmpresaDetalle";
 import EjecutivoPanel from "./pages/EjecutivoPanel";
+import SolicitudEmpleoDetalle from "./pages/SolicitudEmpleoDetalle";
+import CrearSolicitudEmpleo from "./pages/CrearSolicitudEmpleo";
 import Login from "./pages/Login";
 import AdminLogin from "./pages/AdminLogin";
 import Dashboard from "./pages/Dashboard";
@@ -62,6 +64,16 @@ export default function App() {
               <AdminAuthGuard requiredRoles={['ejecutivo']}>
                 <EjecutivoPanel />
               </AdminAuthGuard>
+            } />
+            <Route path="/solicitud-empleo/:id" element={
+              <AdminAuthGuard requiredRoles={['ejecutivo']}>
+                <SolicitudEmpleoDetalle />
+              </AdminAuthGuard>
+            } />
+            <Route path="/empresa/crear-solicitud" element={
+              <AuthGuard requiredRoles={['empresa']}>
+                <CrearSolicitudEmpleo />
+              </AuthGuard>
             } />
             <Route path="/quiero-contratar" element={<QuieroContratar />} />
             <Route path="/publicar-oferta" element={

@@ -9,6 +9,8 @@ export default function EjecutivoPanel() {
   const navigate = useNavigate();
   const [ejecutivo, setEjecutivo] = useState<any>(null);
   const [empresasAsignadas, setEmpresasAsignadas] = useState<any[]>([]);
+  const [solicitudesEmpleo, setSolicitudesEmpleo] = useState<any[]>([]);
+  const [estadisticasSolicitudes, setEstadisticasSolicitudes] = useState<any>({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
@@ -33,17 +35,38 @@ export default function EjecutivoPanel() {
         const idToken = await auth.currentUser?.getIdToken();
 
         // Obtener datos del ejecutivo y sus empresas asignadas
-        const res = await fetch(getApiUrl(`/api/users/ejecutivo/${user._id}/empresas`), {
+        const resEjecutivo = await fetch(getApiUrl(`/api/users/ejecutivo/${user._id}/empresas`), {
           headers: { Authorization: `Bearer ${idToken}` },
         });
 
-        if (!res.ok) {
+        if (!resEjecutivo.ok) {
           throw new Error("Error al obtener datos del ejecutivo");
         }
 
-        const data = await res.json();
-        setEjecutivo(data.ejecutivo);
-        setEmpresasAsignadas(data.empresas);
+        const dataEjecutivo = await resEjecutivo.json();
+        setEjecutivo(dataEjecutivo.ejecutivo);
+        setEmpresasAsignadas(dataEjecutivo.empresas);
+
+        // Obtener solicitudes de empleo pendientes para este ejecutivo
+        const resSolicitudes = await fetch(getApiUrl(`/api/solicitudes-empleo/ejecutivo/${user._id}`), {
+          headers: { Authorization: `Bearer ${idToken}` },
+        });
+
+        if (resSolicitudes.ok) {
+          const dataSolicitudes = await resSolicitudes.json();
+          setSolicitudesEmpleo(dataSolicitudes);
+        }
+
+        // Obtener estadísticas de solicitudes
+        const resEstadisticas = await fetch(getApiUrl(`/api/solicitudes-empleo/ejecutivo/${user._id}/estadisticas`), {
+          headers: { Authorization: `Bearer ${idToken}` },
+        });
+
+        if (resEstadisticas.ok) {
+          const dataEstadisticas = await resEstadisticas.json();
+          setEstadisticasSolicitudes(dataEstadisticas);
+        }
+
       } catch (err: any) {
         console.error("❌ Error cargando datos del ejecutivo:", err);
         setError(err.message || "Error cargando datos");
@@ -142,8 +165,8 @@ export default function EjecutivoPanel() {
               📊 Estadísticas
             </h2>
             <div className="space-y-4">
-              <div className="text-center">
-                <div className="text-3xl font-bold text-blue-600">
+              <div className="text-center p-3 bg-blue-50 rounded-lg">
+                <div className="text-2xl font-bold text-blue-600">
                   {empresasAsignadas.length}
                 </div>
                 <div className="text-sm text-gray-600">
@@ -151,16 +174,185 @@ export default function EjecutivoPanel() {
                 </div>
               </div>
               
-              <div className="text-center">
-                <div className="text-2xl font-bold text-green-600">
-                  {empresasAsignadas.filter(e => e.activo).length}
+              <div className="text-center p-3 bg-orange-50 rounded-lg">
+                <div className="text-2xl font-bold text-orange-600">
+                  {estadisticasSolicitudes.pendientes || 0}
                 </div>
                 <div className="text-sm text-gray-600">
-                  Empresa{empresasAsignadas.filter(e => e.activo).length !== 1 ? 's' : ''} activa{empresasAsignadas.filter(e => e.activo).length !== 1 ? 's' : ''}
+                  Solicitudes pendientes
+                </div>
+              </div>
+
+              <div className="text-center p-3 bg-green-50 rounded-lg">
+                <div className="text-2xl font-bold text-green-600">
+                  {estadisticasSolicitudes.aprobadas || 0}
+                </div>
+                <div className="text-sm text-gray-600">
+                  Solicitudes aprobadas
                 </div>
               </div>
             </div>
           </div>
+        </div>
+
+        {/* Solicitudes de empleo pendientes */}
+        <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-xl font-semibold text-gray-800 flex items-center gap-2">
+              📋 Solicitudes de empleo pendientes
+            </h2>
+            <div className="flex gap-2">
+              <span className="bg-orange-100 text-orange-800 px-3 py-1 rounded-full text-sm font-medium">
+                {solicitudesEmpleo.filter(s => s.estado === 'pendiente').length} Pendientes
+              </span>
+              <span className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-medium">
+                {solicitudesEmpleo.filter(s => s.estado === 'en_revision').length} En revisión
+              </span>
+            </div>
+          </div>
+
+          {solicitudesEmpleo.length === 0 ? (
+            <div className="text-center py-12">
+              <div className="text-6xl mb-4">📋</div>
+              <h3 className="text-xl font-semibold text-gray-700 mb-2">
+                No hay solicitudes pendientes
+              </h3>
+              <p className="text-gray-500">
+                Cuando las empresas envíen solicitudes para crear anuncios de empleo, aparecerán aquí.
+              </p>
+            </div>
+          ) : (
+            <div className="space-y-4">
+              {solicitudesEmpleo
+                .filter(solicitud => ['pendiente', 'en_revision', 'con_correcciones'].includes(solicitud.estado))
+                .map((solicitud) => (
+                <div
+                  key={solicitud._id}
+                  className="border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow"
+                >
+                  <div className="flex items-center justify-between mb-4">
+                    <div>
+                      <h3 className="font-semibold text-gray-800 text-lg">
+                        {solicitud.titulo}
+                      </h3>
+                      <p className="text-sm text-gray-500">
+                        {solicitud.empresa?.nombre || 'Empresa'} • {new Date(solicitud.fechaSolicitud).toLocaleDateString()}
+                      </p>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className={`px-3 py-1 rounded-full text-sm font-medium ${
+                        solicitud.estado === 'pendiente' 
+                          ? 'bg-orange-100 text-orange-800'
+                          : solicitud.estado === 'en_revision'
+                          ? 'bg-blue-100 text-blue-800'
+                          : 'bg-yellow-100 text-yellow-800'
+                      }`}>
+                        {solicitud.estado === 'pendiente' && '⏳ Pendiente'}
+                        {solicitud.estado === 'en_revision' && '🔍 En revisión'}
+                        {solicitud.estado === 'con_correcciones' && '✏️ Con correcciones'}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="grid md:grid-cols-2 gap-4 mb-4">
+                    <div className="space-y-2">
+                      <div className="flex items-center gap-2 text-sm">
+                        <span className="font-medium text-gray-600">💼 Modalidad:</span>
+                        <span className="text-gray-800">{solicitud.modalidad}</span>
+                      </div>
+                      <div className="flex items-center gap-2 text-sm">
+                        <span className="font-medium text-gray-600">📍 Ubicación:</span>
+                        <span className="text-gray-800">{solicitud.ubicacion}</span>
+                      </div>
+                    </div>
+                    <div className="space-y-2">
+                      <div className="flex items-center gap-2 text-sm">
+                        <span className="font-medium text-gray-600">💰 Salario:</span>
+                        <span className="text-gray-800">{solicitud.salario}</span>
+                      </div>
+                      <div className="flex items-center gap-2 text-sm">
+                        <span className="font-medium text-gray-600">⏰ Jornada:</span>
+                        <span className="text-gray-800">{solicitud.jornada}</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="mb-4">
+                    <p className="text-sm text-gray-700 line-clamp-3">
+                      {solicitud.descripcion}
+                    </p>
+                  </div>
+
+                  {solicitud.etiquetas && solicitud.etiquetas.length > 0 && (
+                    <div className="mb-4">
+                      <div className="flex flex-wrap gap-2">
+                        {solicitud.etiquetas.map((etiqueta: string, index: number) => (
+                          <span
+                            key={index}
+                            className="bg-gray-100 text-gray-700 px-2 py-1 rounded text-xs"
+                          >
+                            {etiqueta}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  <div className="flex gap-2 pt-4 border-t border-gray-200">
+                    <button
+                      onClick={() => navigate(`/solicitud-empleo/${solicitud._id}`)}
+                      className="flex-1 bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 transition-colors text-sm"
+                    >
+                      👁️ Ver detalles
+                    </button>
+                    {solicitud.estado === 'pendiente' && (
+                      <button
+                        onClick={() => {
+                          // Función para tomar la solicitud en revisión
+                          const tomarSolicitud = async () => {
+                            try {
+                              const idToken = await auth.currentUser?.getIdToken();
+                              const res = await fetch(getApiUrl(`/api/solicitudes-empleo/${solicitud._id}/revisar`), {
+                                method: 'PUT',
+                                headers: {
+                                  'Content-Type': 'application/json',
+                                  Authorization: `Bearer ${idToken}`,
+                                },
+                                body: JSON.stringify({
+                                  accion: 'tomar_revision',
+                                  ejecutivoId: ejecutivo._id
+                                }),
+                              });
+
+                              if (res.ok) {
+                                // Recargar datos
+                                const user = JSON.parse(localStorage.getItem("user") || "{}");
+                                
+                                const resSolicitudes = await fetch(getApiUrl(`/api/solicitudes-empleo/ejecutivo/${user._id}`), {
+                                  headers: { Authorization: `Bearer ${idToken}` },
+                                });
+
+                                if (resSolicitudes.ok) {
+                                  const dataSolicitudes = await resSolicitudes.json();
+                                  setSolicitudesEmpleo(dataSolicitudes);
+                                }
+                              }
+                            } catch (error) {
+                              console.error('Error al tomar solicitud:', error);
+                            }
+                          };
+                          tomarSolicitud();
+                        }}
+                        className="bg-green-600 text-white py-2 px-4 rounded hover:bg-green-700 transition-colors text-sm"
+                      >
+                        📝 Tomar para revisión
+                      </button>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
 
         {/* Empresas asignadas */}

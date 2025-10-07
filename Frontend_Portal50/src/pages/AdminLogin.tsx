@@ -34,17 +34,30 @@ export default function AdminLogin() {
     }
 
     try {
-      const userCredential = await signInWithEmailAndPassword(auth, email, pass);
-      const firebaseUser = userCredential.user;
+      // Autenticación con Firebase
+      const cred = await signInWithEmailAndPassword(auth, email, pass);
+      const idToken = await cred.user.getIdToken();
+      const uid = cred.user.uid;
 
-      // Verificar datos del usuario en la base de datos
-      const response = await fetch(getApiUrl(`/api/users/firebase/${firebaseUser.uid}`));
+      // Buscar usuario en la base de datos usando la misma API que el login normal
+      let res = await fetch(getApiUrl(`/api/users/uid/${uid}`), {
+        headers: { Authorization: `Bearer ${idToken}` },
+      });
 
-      if (!response.ok) {
-        throw new Error("Usuario no encontrado en la base de datos");
+      let userData;
+      if (res.ok) {
+        userData = await res.json();
+      } else {
+        // Si no se encuentra en usuarios, buscar en empresas
+        res = await fetch(getApiUrl(`/api/empresas/uid/${uid}`), {
+          headers: { Authorization: `Bearer ${idToken}` },
+        });
+        if (!res.ok) {
+          throw new Error("No se encontró el perfil del usuario");
+        }
+        userData = await res.json();
+        if (!userData.rol) userData.rol = "empresa";
       }
-
-      const userData = await response.json();
 
       // Verificar que el usuario sea admin o ejecutivo
       const adminRoles = ['admin-fraccional', 'ejecutivo'];
@@ -55,25 +68,42 @@ export default function AdminLogin() {
         return;
       }
 
+      // Guardar datos del usuario
+      localStorage.setItem("user", JSON.stringify(userData));
       setUser(userData);
+
+      // Mostrar mensaje de éxito
       setSuccess(true);
+      setError(""); // Limpiar cualquier error previo
 
       setTimeout(() => {
         // Redirigir según el rol
         if (userData.rol === 'admin-fraccional') {
-          navigate("/admin-fraccional");
+          navigate("/admin-fraccional", { state: { loginSuccess: true } });
         } else if (userData.rol === 'ejecutivo') {
-          navigate("/ejecutivo");
+          navigate("/ejecutivo", { state: { loginSuccess: true } });
         }
       }, 1500);
 
     } catch (err: any) {
-      console.error(err);
-      if (err.message.includes("Usuario no encontrado")) {
-        setError("Este usuario no tiene permisos de administrador.");
+      console.error("Error en login administrativo:", err);
+      setSuccess(false);
+      
+      // Manejo específico de errores
+      if (err.code === 'auth/user-not-found') {
+        setError("No existe una cuenta administrativa con este correo electrónico.");
+      } else if (err.code === 'auth/wrong-password') {
+        setError("Contraseña incorrecta.");
+      } else if (err.code === 'auth/invalid-email') {
+        setError("El formato del correo electrónico no es válido.");
+      } else if (err.code === 'auth/too-many-requests') {
+        setError("Demasiados intentos fallidos. Intenta de nuevo más tarde.");
+      } else if (err.message?.includes("perfil")) {
+        setError("Usuario autenticado pero sin permisos administrativos.");
       } else {
-        setError("Credenciales incorrectas o acceso no autorizado.");
+        setError("Error de conexión. Verifica tu internet e intenta nuevamente.");
       }
+    } finally {
       setLoading(false);
     }
   };
@@ -110,6 +140,7 @@ export default function AdminLogin() {
         <form onSubmit={handleLogin} className="space-y-4">
           <input
             placeholder="Email administrativo"
+            type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             className={`w-full border p-3 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 ${

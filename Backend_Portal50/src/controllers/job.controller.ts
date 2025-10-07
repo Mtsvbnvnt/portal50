@@ -1,19 +1,33 @@
 import { Request, Response } from 'express';
 import { Job } from '../models/job.model';
+import { User } from '../models/user.model';
 import { createJobSchema, updateJobSchema } from '../validators/job.validator';
+import { AuthRequest } from '../middlewares/auth.middleware';
 
 //Crear una oferta
-export const createJob = async (req: Request, res: Response) => {
+export const createJob = async (req: AuthRequest, res: Response) => {
   const parsed = createJobSchema.safeParse(req.body);
   if (!parsed.success) {
     return res.status(400).json({ message: 'Datos inválidos', errors: parsed.error.flatten().fieldErrors });
   }
 
   try {
+    // Verificar que solo ejecutivos puedan crear jobs directamente
+    if (req.user) {
+      const usuario = await User.findOne({ uid: req.user.uid });
+      if (usuario && usuario.rol === 'empresa') {
+        return res.status(403).json({ 
+          message: 'Las empresas deben crear solicitudes de empleo, no publicar ofertas directamente',
+          redirect: '/empresa/crear-solicitud'
+        });
+      }
+    }
+
     const job = new Job(parsed.data);
     await job.save();
     res.status(201).json({ message: 'Oferta creada correctamente', job });
   } catch (error) {
+    console.error('Error al crear oferta:', error);
     res.status(500).json({ message: 'Error al crear oferta' });
   }
 };
@@ -40,7 +54,7 @@ export const getJobById = async (req: Request, res: Response) => {
 };
 
 //Actualizar Oferta
-export const updateJob = async (req: Request, res: Response) => {
+export const updateJob = async (req: AuthRequest, res: Response) => {
   const parsed = updateJobSchema.safeParse(req.body);
   if (!parsed.success) {
     return res.status(400).json({ message: 'Datos inválidos', errors: parsed.error.flatten().fieldErrors });

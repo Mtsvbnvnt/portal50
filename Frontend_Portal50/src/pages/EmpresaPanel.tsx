@@ -1,12 +1,16 @@
 // src/pages/EmpresaPanel.tsx
 
 import { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { auth } from "../firebase";
+import { getApiUrl } from "../config/api";
+import InfoNuevoProceso from "../components/InfoNuevoProceso";
 
 export default function EmpresaPanel() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const [ofertas, setOfertas] = useState<any[]>([]);
+  const [solicitudesEmpleo, setSolicitudesEmpleo] = useState<any[]>([]);
   const [tab, setTab] = useState("publicaciones");
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [empresa, setEmpresa] = useState<any>(null);
@@ -60,6 +64,15 @@ export default function EmpresaPanel() {
               const allJobs = await resOfertas.json();
               const ownJobs = allJobs.filter((job: any) => job.empresaId === empresaData._id);
               setOfertas(ownJobs);
+
+              // Cargar solicitudes de empleo
+              const resSolicitudes = await fetch(getApiUrl(`/api/solicitudes-empleo/empresa/${empresaData._id}/lista`), {
+                headers: { Authorization: `Bearer ${idToken}` },
+              });
+              if (resSolicitudes.ok) {
+                const solicitudes = await resSolicitudes.json();
+                setSolicitudesEmpleo(solicitudes);
+              }
             } catch (err) {
               console.error("❌ Error cargando datos:", err);
             }
@@ -71,7 +84,25 @@ export default function EmpresaPanel() {
     } else {
       navigate("/");
     }
-  }, [navigate]);
+
+    // Manejar parámetros de URL para tab inicial y mensajes
+    const tabParam = searchParams.get('tab');
+    const successParam = searchParams.get('success');
+    
+    if (tabParam === 'solicitudes') {
+      setTab('solicitudes');
+    }
+    
+    // Mostrar mensaje de éxito si viene de crear solicitud
+    if (successParam === 'created') {
+      // Limpiar el parámetro de la URL después de un momento
+      setTimeout(() => {
+        const url = new URL(window.location.href);
+        url.searchParams.delete('success');
+        window.history.replaceState({}, '', url.toString());
+      }, 3000);
+    }
+  }, [navigate, searchParams]);
 
   const toggleExpand = (id: string) => {
     setExpandedId((prev) => (prev === id ? null : id));
@@ -211,23 +242,47 @@ export default function EmpresaPanel() {
         >
           Publicaciones
         </button>
+        <button
+          onClick={() => setTab("solicitudes")}
+          className={`px-4 py-2 ${tab === "solicitudes" ? "border-b-2 border-blue-600 font-semibold" : ""}`}
+        >
+          Solicitudes de Empleo
+          {solicitudesEmpleo.length > 0 && (
+            <span className="ml-2 bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-xs">
+              {solicitudesEmpleo.length}
+            </span>
+          )}
+        </button>
       </div>
 
       {tab === "publicaciones" && (
         <section>
+          {/* Información sobre el nuevo proceso */}
+          <InfoNuevoProceso />
+          
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-lg font-semibold">Mis Publicaciones</h2>
             <Link
-              to="/publicar-oferta"
-              className="bg-blue-600 text-white px-4 py-2 rounded"
+              to="/empresa/crear-solicitud"
+              className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition-colors"
             >
-              Nueva Publicación
+              📝 Nueva Solicitud de Empleo
             </Link>
           </div>
 
           <div className="space-y-4">
             {ofertas.length === 0 ? (
-              <p className="text-gray-500">No tienes publicaciones aún.</p>
+              <div className="text-center py-8 bg-gray-50 rounded-lg">
+                <div className="text-4xl mb-2">📝</div>
+                <p className="text-gray-600 mb-2">No tienes empleos publicados aún.</p>
+                <p className="text-sm text-gray-500 mb-4">Las ofertas aparecerán aquí después de ser aprobadas por el ejecutivo.</p>
+                <Link
+                  to="/empresa/crear-solicitud"
+                  className="inline-block bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition-colors"
+                >
+                  Crear solicitud de empleo
+                </Link>
+              </div>
             ) : (
               ofertas.map((o) => (
                 <div key={o._id} className="border rounded p-4 bg-white shadow">
@@ -290,6 +345,216 @@ export default function EmpresaPanel() {
                           Editar
                         </Link>
                       </div>
+                    </div>
+                  )}
+                </div>
+              ))
+            )}
+          </div>
+        </section>
+      )}
+
+      {tab === "solicitudes" && (
+        <section>
+          {/* Mensaje de éxito */}
+          {searchParams.get('success') === 'created' && (
+            <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4 flex items-center gap-2">
+              <span className="text-lg">✅</span>
+              <div>
+                <strong>¡Solicitud creada exitosamente!</strong>
+                <p className="text-sm">Tu solicitud ha sido enviada para revisión. Te notificaremos cuando sea procesada.</p>
+              </div>
+            </div>
+          )}
+          
+          <div className="flex justify-between items-center mb-4">
+            <h2 className="text-lg font-semibold">Solicitudes de Empleo</h2>
+            <Link
+              to="/empresa/crear-solicitud"
+              className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition-colors"
+            >
+              + Nueva Solicitud
+            </Link>
+          </div>
+
+          <div className="space-y-4">
+            {solicitudesEmpleo.length === 0 ? (
+              <div className="text-center py-12 bg-white rounded-lg shadow-sm">
+                <div className="text-6xl mb-4">📋</div>
+                <h3 className="text-xl font-semibold text-gray-700 mb-2">
+                  No tienes solicitudes de empleo
+                </h3>
+                <p className="text-gray-500 mb-4">
+                  Crea una solicitud para que nuestro equipo revise y publique tu oferta de empleo.
+                </p>
+                <Link
+                  to="/empresa/crear-solicitud"
+                  className="inline-block bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition-colors"
+                >
+                  Crear primera solicitud
+                </Link>
+              </div>
+            ) : (
+              solicitudesEmpleo.map((solicitud) => (
+                <div key={solicitud._id} className="border rounded-lg p-6 bg-white shadow-sm">
+                  <div className="flex justify-between items-start mb-4">
+                    <div className="flex-1">
+                      <h3 className="font-bold text-lg text-gray-800">{solicitud.titulo}</h3>
+                      <p className="text-sm text-gray-600 mb-2">
+                        Creada el {new Date(solicitud.fechaSolicitud).toLocaleDateString()}
+                        {solicitud.fechaActualizacion && (
+                          <> • Actualizada el {new Date(solicitud.fechaActualizacion).toLocaleDateString()}</>
+                        )}
+                      </p>
+                      <div className="flex items-center gap-4 text-sm text-gray-600">
+                        <span>📍 {solicitud.ubicacion}</span>
+                        <span>💼 {solicitud.modalidad}</span>
+                        <span>💰 {solicitud.salario}</span>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <span className={`px-3 py-1 rounded-full text-sm font-medium ${
+                        solicitud.estado === 'pendiente' 
+                          ? 'bg-orange-100 text-orange-800'
+                          : solicitud.estado === 'en_revision'
+                          ? 'bg-blue-100 text-blue-800'
+                          : solicitud.estado === 'aprobada'
+                          ? 'bg-green-100 text-green-800'
+                          : solicitud.estado === 'rechazada'
+                          ? 'bg-red-100 text-red-800'
+                          : solicitud.estado === 'con_correcciones'
+                          ? 'bg-yellow-100 text-yellow-800'
+                          : 'bg-purple-100 text-purple-800'
+                      }`}>
+                        {solicitud.estado === 'pendiente' && '⏳ Pendiente'}
+                        {solicitud.estado === 'en_revision' && '🔍 En revisión'}
+                        {solicitud.estado === 'aprobada' && '✅ Aprobada'}
+                        {solicitud.estado === 'rechazada' && '❌ Rechazada'}
+                        {solicitud.estado === 'con_correcciones' && '✏️ Requiere correcciones'}
+                        {solicitud.estado === 'publicada' && '🚀 Publicada'}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="mb-4">
+                    <p className="text-gray-700 text-sm line-clamp-3">
+                      {solicitud.descripcion}
+                    </p>
+                  </div>
+
+                  {solicitud.etiquetas && solicitud.etiquetas.length > 0 && (
+                    <div className="mb-4">
+                      <div className="flex flex-wrap gap-2">
+                        {solicitud.etiquetas.map((etiqueta: string, index: number) => (
+                          <span
+                            key={index}
+                            className="bg-gray-100 text-gray-700 px-2 py-1 rounded text-xs"
+                          >
+                            {etiqueta}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Comentarios del ejecutivo */}
+                  {solicitud.comentariosEjecutivo && (
+                    <div className="mb-4 p-3 bg-blue-50 rounded-lg border-l-4 border-blue-500">
+                      <h4 className="font-medium text-blue-800 mb-1">Comentarios del ejecutivo:</h4>
+                      <p className="text-blue-700 text-sm">{solicitud.comentariosEjecutivo}</p>
+                    </div>
+                  )}
+
+                  <div className="flex justify-between items-center pt-4 border-t border-gray-200">
+                    <div className="text-sm text-gray-500">
+                      {solicitud.ejecutivoId ? (
+                        <span>Asignado a ejecutivo</span>
+                      ) : (
+                        <span>Sin asignar</span>
+                      )}
+                    </div>
+                    <div className="flex gap-2">
+                      <button
+                        onClick={() => setExpandedId(expandedId === solicitud._id ? null : solicitud._id)}
+                        className="text-blue-600 hover:text-blue-800 text-sm underline"
+                      >
+                        {expandedId === solicitud._id ? "Ocultar detalles" : "Ver detalles"}
+                      </button>
+                      
+                      {solicitud.estado === 'con_correcciones' && (
+                        <Link
+                          to={`/empresa/editar-solicitud/${solicitud._id}`}
+                          className="bg-yellow-600 text-white px-3 py-1 rounded text-sm hover:bg-yellow-700 transition-colors"
+                        >
+                          Corregir
+                        </Link>
+                      )}
+                      
+                      {solicitud.estado === 'publicada' && solicitud.jobId && (
+                        <Link
+                          to={`/empresa/postulantes/${solicitud.jobId}`}
+                          className="bg-blue-600 text-white px-3 py-1 rounded text-sm hover:bg-blue-700 transition-colors"
+                        >
+                          Ver postulantes
+                        </Link>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Detalles expandidos */}
+                  {expandedId === solicitud._id && (
+                    <div className="mt-4 pt-4 border-t border-gray-200">
+                      <div className="grid md:grid-cols-2 gap-4 mb-4">
+                        <div>
+                          <h4 className="font-medium text-gray-700 mb-2">Detalles del puesto:</h4>
+                          <div className="space-y-1 text-sm text-gray-600">
+                            <p><strong>Jornada:</strong> {solicitud.jornada}</p>
+                            <p><strong>Modalidad:</strong> {solicitud.modalidad}</p>
+                            <p><strong>Ubicación:</strong> {solicitud.ubicacion}</p>
+                            <p><strong>Salario:</strong> {solicitud.salario}</p>
+                          </div>
+                        </div>
+                        
+                        {solicitud.preguntas && solicitud.preguntas.length > 0 && (
+                          <div>
+                            <h4 className="font-medium text-gray-700 mb-2">
+                              Preguntas para candidatos ({solicitud.preguntas.length}):
+                            </h4>
+                            <div className="space-y-1 text-sm text-gray-600">
+                              {solicitud.preguntas.slice(0, 3).map((pregunta: any, index: number) => (
+                                <p key={index} className="truncate">
+                                  • {pregunta.pregunta}
+                                  {pregunta.obligatoria && <span className="text-red-500 ml-1">*</span>}
+                                </p>
+                              ))}
+                              {solicitud.preguntas.length > 3 && (
+                                <p className="text-gray-500 italic">
+                                  ... y {solicitud.preguntas.length - 3} más
+                                </p>
+                              )}
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                      
+                      {/* Historial */}
+                      {solicitud.historial && solicitud.historial.length > 0 && (
+                        <div>
+                          <h4 className="font-medium text-gray-700 mb-2">Historial:</h4>
+                          <div className="space-y-2 max-h-32 overflow-y-auto">
+                            {solicitud.historial.map((evento: any, index: number) => (
+                              <div key={index} className="text-xs text-gray-600 bg-gray-50 p-2 rounded">
+                                <span className="font-medium">
+                                  {new Date(evento.fecha).toLocaleDateString()} - {evento.estado}
+                                </span>
+                                {evento.comentario && (
+                                  <p className="mt-1 italic">"{evento.comentario}"</p>
+                                )}
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
                     </div>
                   )}
                 </div>

@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.updateJobQuestions = exports.deleteJob = exports.updateJob = exports.getJobById = exports.getAllJobs = exports.createJob = void 0;
 const job_model_1 = require("../models/job.model");
+const user_model_1 = require("../models/user.model");
 const job_validator_1 = require("../validators/job.validator");
 //Crear una oferta
 const createJob = async (req, res) => {
@@ -10,11 +11,22 @@ const createJob = async (req, res) => {
         return res.status(400).json({ message: 'Datos inválidos', errors: parsed.error.flatten().fieldErrors });
     }
     try {
+        // Verificar que solo ejecutivos puedan crear jobs directamente
+        if (req.user) {
+            const usuario = await user_model_1.User.findOne({ uid: req.user.uid });
+            if (usuario && usuario.rol === 'empresa') {
+                return res.status(403).json({
+                    message: 'Las empresas deben crear solicitudes de empleo, no publicar ofertas directamente',
+                    redirect: '/empresa/crear-solicitud'
+                });
+            }
+        }
         const job = new job_model_1.Job(parsed.data);
         await job.save();
         res.status(201).json({ message: 'Oferta creada correctamente', job });
     }
     catch (error) {
+        console.error('Error al crear oferta:', error);
         res.status(500).json({ message: 'Error al crear oferta' });
     }
 };

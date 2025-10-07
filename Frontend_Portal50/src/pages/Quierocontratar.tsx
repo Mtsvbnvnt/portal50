@@ -79,7 +79,7 @@ export default function QuieroContratar() {
         <section className="py-12 px-4 text-center">
           <div className="inline-block bg-gradient-to-br from-blue-100 via-blue-50 to-white border-2 border-blue-400 text-blue-900 px-12 py-10 rounded-3xl shadow-2xl max-w-2xl animate-fade-in">
             <h3 className="text-3xl md:text-4xl font-extrabold mb-4 text-blue-800 drop-shadow">¿Eres una empresa?</h3>
-            <p className="mb-6 text-lg md:text-xl font-medium">Únete a Portal 50+ y accede a una red exclusiva de trabajadores certificados.<br/>Publica tus ofertas de empleo y encuentra el talento que tu empresa necesita.</p>
+            <p className="mb-6 text-lg md:text-xl font-medium">Únete a Portal 50+ y accede a una red exclusiva de trabajadores certificados.<br/>Crea solicitudes de empleo que serán revisadas por nuestro equipo antes de ser publicadas.</p>
             <Link
               to="/register-empresa"
               className="bg-blue-600 hover:bg-blue-700 text-white px-10 py-4 rounded-full text-lg font-bold shadow-lg transition transform hover:scale-105"
