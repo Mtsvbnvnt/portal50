@@ -44,7 +44,7 @@ export const AdminAuthGuard: React.FC<AdminAuthGuardProps> = ({
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-900">
         <div className="text-center bg-white dark:bg-gray-800 p-8 rounded-lg shadow-lg max-w-md">
-          <div className="text-red-500 text-4xl mb-4">🚫</div>
+          <div className="text-red-500 text-4xl mb-4">[PROHIBIDO]</div>
           <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-2">Acceso Denegado</h2>
           <p className="text-gray-700 dark:text-gray-300 mb-4">Se requieren permisos administrativos para acceder a esta sección</p>
           <button

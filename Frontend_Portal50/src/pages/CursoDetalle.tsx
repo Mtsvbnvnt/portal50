@@ -53,7 +53,7 @@ export default function CursoDetalle() {
     return <div className="p-10 text-center text-red-500">No se pudo cargar el curso.</div>;
   }
 
-  const estrellas = "⭐".repeat(Math.round(curso.calificacionPromedio || 0));
+  const estrellas = "[★]".repeat(Math.round(curso.calificacionPromedio || 0));
 
   return (
     <main className="min-h-screen bg-gray-50 text-gray-800 p-6 md:p-10">
@@ -85,7 +85,7 @@ export default function CursoDetalle() {
 
         {/* Duración */}
         <div className="mb-6 text-sm text-gray-700">
-          ⏱️ Duración estimada: <strong>{curso.duracionMinutos || "?"} minutos</strong>
+          [DURACIÓN] Duración estimada: <strong>{curso.duracionMinutos || "?"} minutos</strong>
         </div>
 
         {/* Profesional */}
@@ -132,13 +132,13 @@ export default function CursoDetalle() {
             onClick={() => {}}
             className="bg-blue-600 hover:bg-blue-700 text-white text-lg px-8 py-3 rounded-full shadow"
           >
-            🛒 Comprar curso
+            [COMPRAR] Comprar curso
           </button>
         </div>
 
         {/* Evaluaciones del curso */}
         <div className="bg-white p-6 rounded shadow">
-          <h2 className="text-lg font-bold mb-4">🗣️ Opiniones de estudiantes</h2>
+          <h2 className="text-lg font-bold mb-4">[OPINIONES] Opiniones de estudiantes</h2>
 
           {evaluaciones.length === 0 ? (
             <p className="text-gray-500">Aún no hay evaluaciones para este curso.</p>
@@ -161,7 +161,7 @@ export default function CursoDetalle() {
                     </div>
                   </div>
                   <p className="text-yellow-500 text-lg mb-1">
-                    {"⭐".repeat(evaluacion.estrellas)}
+                    {"[★]".repeat(evaluacion.estrellas)}
                   </p>
                   <p className="text-gray-700 text-sm">{evaluacion.comentario}</p>
                 </li>

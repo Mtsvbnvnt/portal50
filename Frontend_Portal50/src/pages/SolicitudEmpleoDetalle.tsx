@@ -182,8 +182,8 @@ export default function SolicitudEmpleoDetalle() {
       case 'en_revision': return '🔍 En revisión';
       case 'aprobada': return '✅ Aprobada';
       case 'rechazada': return '❌ Rechazada';
-      case 'con_correcciones': return '✏️ Con correcciones';
-      case 'publicada': return '🚀 Publicada';
+      case 'con_correcciones': return '[CORRECCIONES] Con correcciones';
+      case 'publicada': return '[PUBLICADA] Publicada';
       default: return estado;
     }
   };
@@ -219,7 +219,7 @@ export default function SolicitudEmpleoDetalle() {
             {/* Descripción del puesto */}
             <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6">
               <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-4">
-                📝 Descripción del puesto
+                [DESCRIPCIÓN] Descripción del puesto
               </h2>
               <p className="text-gray-700 dark:text-gray-300 whitespace-pre-wrap">
                 {solicitud.descripcion}
@@ -229,7 +229,7 @@ export default function SolicitudEmpleoDetalle() {
             {/* Detalles del empleo */}
             <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6">
               <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-4">
-                💼 Detalles del empleo
+                [DETALLES] Detalles del empleo
               </h2>
               
               <div className="grid md:grid-cols-2 gap-4">
@@ -304,11 +304,11 @@ export default function SolicitudEmpleoDetalle() {
                   {solicitud.historial.map((evento: any, index: number) => (
                     <div key={index} className="flex items-start gap-3 p-3 bg-gray-50 dark:bg-gray-700 rounded">
                       <div className="text-2xl">
-                        {evento.accion === 'creada' && '📝'}
+                        {evento.accion === 'creada' && '[CREADA]'}
                         {evento.accion === 'en_revision' && '🔍'}
                         {evento.accion === 'aprobada' && '✅'}
                         {evento.accion === 'rechazada' && '❌'}
-                        {evento.accion === 'solicitar_correcciones' && '✏️'}
+                        {evento.accion === 'solicitar_correcciones' && '[CORREGIR]'}
                         {evento.accion === 'correcciones_enviadas' && '📤'}
                       </div>
                       <div className="flex-1">
@@ -393,7 +393,7 @@ export default function SolicitudEmpleoDetalle() {
                       disabled={procesando}
                       className="w-full bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 transition-colors disabled:opacity-50"
                     >
-                      {procesando ? '⏳ Procesando...' : '📝 Tomar para revisión'}
+                      {procesando ? '[PROCESANDO] Procesando...' : '[REVISAR] Tomar para revisión'}
                     </button>
                   )}
 
@@ -428,7 +428,7 @@ export default function SolicitudEmpleoDetalle() {
                           disabled={procesando}
                           className="w-full bg-yellow-600 text-white py-2 px-4 rounded hover:bg-yellow-700 transition-colors disabled:opacity-50"
                         >
-                          {procesando ? '⏳ Procesando...' : '✏️ Solicitar correcciones'}
+                          {procesando ? '[PROCESANDO] Procesando...' : '[CORREGIR] Solicitar correcciones'}
                         </button>
                         
                         <button
@@ -455,7 +455,7 @@ export default function SolicitudEmpleoDetalle() {
                   <div className="text-4xl mb-2">
                     {solicitud.estado === 'aprobada' && '✅'}
                     {solicitud.estado === 'rechazada' && '❌'}
-                    {solicitud.estado === 'publicada' && '🚀'}
+                    {solicitud.estado === 'publicada' && '[PUBLICADA]'}
                   </div>
                   <p className="text-gray-600 dark:text-gray-400">
                     {solicitud.estado === 'aprobada' && 'Solicitud aprobada y empleo creado'}

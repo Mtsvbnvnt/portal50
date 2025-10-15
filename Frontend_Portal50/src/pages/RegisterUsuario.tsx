@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../firebase";
 import { useNavigate } from "react-router-dom";
+import { getApiUrl } from "../config/api";
 import jsPDF from "jspdf";
 
 export default function RegisterUsuario() {
@@ -65,7 +66,7 @@ export default function RegisterUsuario() {
   const [pass, setPass] = useState("");
   const [nombre, setNombre] = useState("");
   const [telefono, setTelefono] = useState("");
-  const [pais, setPais] = useState("");
+  const [pais, setPais] = useState("Chile");
   const [cvFile, setCvFile] = useState<File | null>(null);
   const [videoFile, setVideoFile] = useState<File | null>(null);
   const [noCv, setNoCv] = useState(false);
@@ -94,9 +95,14 @@ export default function RegisterUsuario() {
       return;
     }
     try {
+      console.log("🔄 Iniciando registro de usuario...");
       const userCredential = await createUserWithEmailAndPassword(auth, email, pass);
       const user = userCredential.user;
+      console.log("✅ Usuario Firebase creado:", user.uid);
+      
       const idToken = await user.getIdToken();
+      console.log("✅ Token obtenido");
+      
       const formData = new FormData();
       formData.append("uid", user.uid);
       formData.append("nombre", nombre);
@@ -104,25 +110,42 @@ export default function RegisterUsuario() {
       formData.append("telefono", telefono);
       formData.append("pais", pais);
       formData.append("rol", "profesional");
-      formData.append("habilidades", JSON.stringify(habilidades.split(",").map((h) => h.trim())));
+      formData.append("habilidades", habilidades);
       if (cvFile) formData.append("cv", cvFile);
       if (videoFile) formData.append("videoPresentacion", videoFile);
-  if (noCv) formData.append("experiencias", JSON.stringify(experiencias));
-  formData.append("educaciones", JSON.stringify(educaciones));
-      const res = await fetch("http://localhost:3000/api/users", {
+      if (noCv) formData.append("experiencias", JSON.stringify(experiencias));
+      formData.append("educacion", JSON.stringify(educaciones));
+      
+      console.log("🔄 Enviando datos al backend...");
+      const apiUrl = getApiUrl("/api/users");
+      console.log("📡 URL de API:", apiUrl);
+      
+      const res = await fetch(apiUrl, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${idToken}`,
         },
         body: formData,
       });
-      if (!res.ok) throw new Error("Error guardando en MongoDB");
+      
+      console.log("📡 Respuesta del servidor:", res.status, res.statusText);
+      
+      if (!res.ok) {
+        const errorData = await res.text();
+        console.error("❌ Error del servidor:", errorData);
+        throw new Error(`Error del servidor: ${res.status} - ${errorData}`);
+      }
+      
+      const responseData = await res.json();
+      console.log("✅ Usuario guardado en BD:", responseData);
+      
       setSuccess(true);
       setTimeout(() => {
         navigate("/", { state: { success: true } });
-      }, 1000);
+      }, 2000);
     } catch (err: any) {
-      setError(err.message);
+      console.error("❌ Error completo:", err);
+      setError(err.message || "Error desconocido al registrar usuario");
     }
   };
 
@@ -158,12 +181,40 @@ export default function RegisterUsuario() {
           onChange={(e) => setTelefono(e.target.value)}
           className="input mb-4"
         />
-        <input
-          placeholder="País"
+        <select
           value={pais}
           onChange={(e) => setPais(e.target.value)}
           className="input mb-4"
-        />
+        >
+          <option value="Chile">Chile</option>
+          <option value="Argentina">Argentina</option>
+          <option value="Brasil">Brasil</option>
+          <option value="Colombia">Colombia</option>
+          <option value="Ecuador">Ecuador</option>
+          <option value="España">España</option>
+          <option value="Estados Unidos">Estados Unidos</option>
+          <option value="México">México</option>
+          <option value="Perú">Perú</option>
+          <option value="Uruguay">Uruguay</option>
+          <option value="Venezuela">Venezuela</option>
+          <option value="Bolivia">Bolivia</option>
+          <option value="Paraguay">Paraguay</option>
+          <option value="Costa Rica">Costa Rica</option>
+          <option value="Guatemala">Guatemala</option>
+          <option value="Honduras">Honduras</option>
+          <option value="Nicaragua">Nicaragua</option>
+          <option value="Panamá">Panamá</option>
+          <option value="El Salvador">El Salvador</option>
+          <option value="República Dominicana">República Dominicana</option>
+          <option value="Cuba">Cuba</option>
+          <option value="Canadá">Canadá</option>
+          <option value="Francia">Francia</option>
+          <option value="Italia">Italia</option>
+          <option value="Alemania">Alemania</option>
+          <option value="Reino Unido">Reino Unido</option>
+          <option value="Portugal">Portugal</option>
+          <option value="Otro">Otro</option>
+        </select>
         <input
           placeholder="Habilidades técnicas (opcional)"
           value={habilidades}
@@ -204,8 +255,7 @@ export default function RegisterUsuario() {
                 }}
                 className="input"
               />
-              <input
-                placeholder="País"
+              <select
                 value={edu.pais}
                 onChange={e => {
                   const arr = [...educaciones];
@@ -213,7 +263,37 @@ export default function RegisterUsuario() {
                   setEducaciones(arr);
                 }}
                 className="input"
-              />
+              >
+                <option value="">Seleccionar país</option>
+                <option value="Chile">Chile</option>
+                <option value="Argentina">Argentina</option>
+                <option value="Brasil">Brasil</option>
+                <option value="Colombia">Colombia</option>
+                <option value="Ecuador">Ecuador</option>
+                <option value="España">España</option>
+                <option value="Estados Unidos">Estados Unidos</option>
+                <option value="México">México</option>
+                <option value="Perú">Perú</option>
+                <option value="Uruguay">Uruguay</option>
+                <option value="Venezuela">Venezuela</option>
+                <option value="Bolivia">Bolivia</option>
+                <option value="Paraguay">Paraguay</option>
+                <option value="Costa Rica">Costa Rica</option>
+                <option value="Guatemala">Guatemala</option>
+                <option value="Honduras">Honduras</option>
+                <option value="Nicaragua">Nicaragua</option>
+                <option value="Panamá">Panamá</option>
+                <option value="El Salvador">El Salvador</option>
+                <option value="República Dominicana">República Dominicana</option>
+                <option value="Cuba">Cuba</option>
+                <option value="Canadá">Canadá</option>
+                <option value="Francia">Francia</option>
+                <option value="Italia">Italia</option>
+                <option value="Alemania">Alemania</option>
+                <option value="Reino Unido">Reino Unido</option>
+                <option value="Portugal">Portugal</option>
+                <option value="Otro">Otro</option>
+              </select>
               <input
                 placeholder="Desde (año)"
                 type="number"

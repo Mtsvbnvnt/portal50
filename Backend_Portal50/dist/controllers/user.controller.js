@@ -99,18 +99,28 @@ const createUser = async (req, res) => {
         }
         // Procesar arrays
         let experiencias = [];
-        let educaciones = [];
+        let educacion = [];
         if (req.body.experiencias) {
             try {
                 experiencias = JSON.parse(req.body.experiencias);
             }
             catch { }
         }
-        if (req.body.educaciones) {
+        if (req.body.educacion) {
             try {
-                educaciones = JSON.parse(req.body.educaciones);
+                educacion = JSON.parse(req.body.educacion);
             }
             catch { }
+        }
+        // Procesar habilidades
+        let habilidadesArray = [];
+        if (req.body.habilidades) {
+            if (typeof req.body.habilidades === 'string') {
+                habilidadesArray = req.body.habilidades.split(',').map((h) => h.trim()).filter((h) => h.length > 0);
+            }
+            else {
+                habilidadesArray = req.body.habilidades;
+            }
         }
         const nuevo = await user_model_1.User.create({
             uid,
@@ -119,11 +129,11 @@ const createUser = async (req, res) => {
             telefono,
             pais,
             rol,
-            habilidades,
+            habilidades: habilidadesArray,
             cv: cvPath,
             videoPresentacion: videoPath,
             experiencias,
-            educaciones,
+            educacion,
             activo: true,
             isEjecutivo: false,
         });

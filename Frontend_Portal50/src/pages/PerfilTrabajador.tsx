@@ -5,11 +5,11 @@ type EstadoDisponibilidad = "disponible" | "con condiciones" | "no disponible";
 
 const disponibilidadInfo: Record<EstadoDisponibilidad, { texto: string; color: string }> = {
   disponible: {
-    texto: "🟢 Disponible para trabajar",
+    texto: "[DISPONIBLE] Disponible para trabajar",
     color: "bg-green-100 text-green-800 border-green-300",
   },
   "con condiciones": {
-    texto: "🟡 Disponible con condiciones",
+    texto: "[CONDICIONES] Disponible con condiciones",
     color: "bg-yellow-100 text-yellow-800 border-yellow-300",
   },
   "no disponible": {

@@ -85,7 +85,7 @@ export default function PublicarOferta() {
           fechaPublicacion: new Date(),
           estado,
           moderada: false,
-          preguntas, // ⬅️ enviar preguntas al backend
+          preguntas, // enviar preguntas al backend
         }),
       });
 

@@ -24,9 +24,47 @@
   "home": {
     "hero_title": "Portal50+",
     "hero_subtitle": "La plataforma líder para profesionales mayores de 50 años",
-    "hero_description": "Conecta con oportunidades laborales, aprende nuevas habilidades y encuentra tu próximo desafío profesional.",
+    "hero_description": "Tu comunidad para conectar empresas, profesionales y aprendices con oportunidades reales.",
     "get_started": "Comenzar",
-    "learn_more": "Saber más"
+    "learn_more": "Saber más",
+    "welcome_title": "Bienvenido a Portal50+",
+    "welcome_subtitle": "Tu comunidad para conectar empresas, profesionales y aprendices con oportunidades reales.",
+    "what_is_portal": "¿Qué es Portal50+?",
+    "what_is_description": "Portal50+ es una plataforma que impulsa la conexión entre profesionales con experiencia, empresas que valoran el talento y aprendices que buscan crecer.",
+    "success_registration": "Registro exitoso",
+    "success_login": "Inicio de sesión exitoso",
+    "work_section": {
+      "title": "Quiero trabajar",
+      "description": "¿Tienes experiencia y buscas nuevas oportunidades laborales? Únete como profesional para:",
+      "benefit1": "Encontrar empleos que valoren tu experiencia",
+      "benefit2": "Crear un perfil profesional destacado",
+      "benefit3": "Acceder a cursos de actualización",
+      "benefit4": "Conectar con empresas que te buscan",
+      "register_button": "Registrarse como Profesional",
+      "card_description": "Encuentra ofertas laborales y postula a empleos."
+    },
+    "hire_section": {
+      "title": "Quiero contratar",
+      "description": "¿Necesitas talento experimentado para tu empresa? Regístrate como empresa para:",
+      "benefit1": "Publicar ofertas laborales específicas",
+      "benefit2": "Buscar profesionales calificados",
+      "benefit3": "Acceder a una base de talento +50",
+      "benefit4": "Gestionar postulaciones de manera eficiente",
+      "register_button": "Registrarse como Empresa",
+      "card_description": "Encuentra talento certificado para tu empresa."
+    },
+    "learn_section": {
+      "title": "Quiero aprender",
+      "description": "¿Quieres aprender y crecer profesionalmente? Únete como aprendiz para:",
+      "benefit1": "Acceder a cursos y capacitaciones",
+      "benefit2": "Recibir mentorías de profesionales",
+      "benefit3": "Encontrar oportunidades de inicio",
+      "benefit4": "Desarrollar habilidades relevantes",
+      "register_button": "Registrarse como Aprendiz",
+      "card_description": "Accede a cursos y mentorías para potenciar tus habilidades."
+    },
+    "admin_access": "¿Eres administrador o ejecutivo?",
+    "admin_link": "Acceso administrativo"
   },
   "courses": {
     "title": "Cursos Portal50+",

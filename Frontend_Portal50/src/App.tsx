@@ -14,6 +14,8 @@ import Dashboard from "./pages/Dashboard";
 import RegisterSelector from "./pages/RegisterSelector";
 import RegisterEmpresa from "./pages/RegisterEmpresa";
 import RegisterUsuario from "./pages/RegisterUsuario";
+import RegisterTrabajador from "./pages/RegisterTrabajador";
+import RegisterAprendiz from "./pages/RegisterAprendiz";
 import Configuracion from "./pages/Configuracion";
 import QuieroContratar from "./pages/Quierocontratar";
 import EmpresaPanel from "./pages/EmpresaPanel";
@@ -24,6 +26,7 @@ import PostularOferta from "./pages/PostularOferta";
 import EditarOferta from "./pages/EditarOferta";
 import Trabajadores from "./pages/Trabajadores";
 import CompletarPerfil from "./pages/CompletarPerfil";
+import CompletarCV from "./pages/CompletarCV";
 import PerfilTrabajador from "./pages/PerfilTrabajador";
 import Aprender from "./pages/Aprender";
 import CursoDetalle from "./pages/CursoDetalle";
@@ -43,6 +46,8 @@ export default function App() {
              <Route path="/register" element={<RegisterSelector />} />
              <Route path="/register-empresa" element={<RegisterEmpresa />} />
              <Route path="/register-usuario" element={<RegisterUsuario />} />
+             <Route path="/register-trabajador" element={<RegisterTrabajador />} />
+             <Route path="/register-aprendiz" element={<RegisterAprendiz />} />
             <Route path="/login" element={<Login />} />
             <Route path="/admin" element={<AdminLogin />} />
             <Route path="/dashboard" element={
@@ -90,6 +95,11 @@ export default function App() {
             <Route path="/completar-perfil" element={
               <AuthGuard>
                 <CompletarPerfil />
+              </AuthGuard>
+            } />
+            <Route path="/completar-cv" element={
+              <AuthGuard requiredRoles={['profesional', 'profesional-ejecutivo']}>
+                <CompletarCV />
               </AuthGuard>
             } />
             <Route path="/quiero-contratar/trabajadores" element={

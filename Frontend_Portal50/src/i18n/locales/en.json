@@ -24,9 +24,47 @@
   "home": {
     "hero_title": "Portal50+",
     "hero_subtitle": "The leading platform for professionals over 50",
-    "hero_description": "Connect with job opportunities, learn new skills and find your next professional challenge.",
+    "hero_description": "Your community to connect companies, professionals and learners with real opportunities.",
     "get_started": "Get Started",
-    "learn_more": "Learn More"
+    "learn_more": "Learn More",
+    "welcome_title": "Welcome to Portal50+",
+    "welcome_subtitle": "Your community to connect companies, professionals and learners with real opportunities.",
+    "what_is_portal": "What is Portal50+?",
+    "what_is_description": "Portal50+ is a platform that drives connection between experienced professionals, companies that value talent and learners looking to grow.",
+    "success_registration": "Successful registration",
+    "success_login": "Successful login",
+    "work_section": {
+      "title": "I want to work",
+      "description": "Do you have experience and are looking for new job opportunities? Join as a professional to:",
+      "benefit1": "Find jobs that value your experience",
+      "benefit2": "Create an outstanding professional profile",
+      "benefit3": "Access update courses",
+      "benefit4": "Connect with companies looking for you",
+      "register_button": "Register as Professional",
+      "card_description": "Find job offers and apply for jobs."
+    },
+    "hire_section": {
+      "title": "I want to hire",
+      "description": "Do you need experienced talent for your company? Register as a company to:",
+      "benefit1": "Post specific job offers",
+      "benefit2": "Search for qualified professionals",
+      "benefit3": "Access a +50 talent base",
+      "benefit4": "Manage applications efficiently",
+      "register_button": "Register as Company",
+      "card_description": "Find certified talent for your company."
+    },
+    "learn_section": {
+      "title": "I want to learn",
+      "description": "Do you want to learn and grow professionally? Join as a learner to:",
+      "benefit1": "Access courses and training",
+      "benefit2": "Receive mentoring from professionals",
+      "benefit3": "Find startup opportunities",
+      "benefit4": "Develop relevant skills",
+      "register_button": "Register as Learner",
+      "card_description": "Access courses and mentoring to enhance your skills."
+    },
+    "admin_access": "Are you an administrator or executive?",
+    "admin_link": "Administrative access"
   },
   "courses": {
     "title": "Portal50+ Courses",

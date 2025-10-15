@@ -25,7 +25,7 @@ export default function Configuracion() {
   const [idiomas, setIdiomas] = useState([{ idioma: "", nivel: "" }]);
   const [cvFile, setCvFile] = useState<File | null>(null);
   const [videoFile, setVideoFile] = useState<File | null>(null);
-  const [modalidadPreferida, setModalidadPreferida] = useState("");
+  const [modalidadesTrabajo, setModalidadesTrabajo] = useState<string[]>([]);
   const [status, setStatus] = useState("");
   const [userId, setUserId] = useState<string | null>(null);
   const [useruid, setUseruid] = useState<string | null>(null);
@@ -33,6 +33,17 @@ export default function Configuracion() {
   const [disponibilidad, setDisponibilidad] = useState("disponible");
   const [profilePic, setProfilePic] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+
+  // Función para manejar cambios en modalidades de trabajo
+  const handleModalidadChange = (modalidad: string) => {
+    setModalidadesTrabajo(prev => {
+      if (prev.includes(modalidad)) {
+        return prev.filter(m => m !== modalidad);
+      } else {
+        return [...prev, modalidad];
+      }
+    });
+  };
 
   useEffect(() => {
   const loadPreviewImagen = async (fotoPerfilLocal: string | undefined, id: string, rol: string) => {
@@ -81,7 +92,7 @@ export default function Configuracion() {
     { rol === "profesional" && (setPais(user.pais || ""))}
     setPais(user.direccion || "");
     setExperiencia(user.experiencia || "");
-    setModalidadPreferida(user.modalidadPreferida || "");
+    setModalidadesTrabajo(user.modalidadesTrabajo || []);
     setDisponibilidad(user.disponibilidad || "disponible");
     if (user.educacion?.length) setEducacion(user.educacion[0]);
     if (user.idiomas?.length) setIdiomas(user.idiomas);
@@ -180,7 +191,7 @@ export default function Configuracion() {
               experiencia,
               educacion: [educacion],
               idiomas,
-              modalidadPreferida,
+              modalidadesTrabajo,
               disponibilidad,
             };
 
@@ -270,7 +281,7 @@ export default function Configuracion() {
 
       {userId && (
         <div className="mb-4 p-4 bg-white border rounded shadow text-gray-700 w-full max-w-6xl">
-          <p className="font-bold text-sm text-gray-600 mb-1">🔑 ID de Usuario</p>
+          <p className="font-bold text-sm text-gray-600 mb-1">[ID] ID de Usuario</p>
           <p className="text-xs break-all">{useruid}</p>
           <p className="text-xs text-gray-500">Este ID se usa para asociarte como ejecutivo en una empresa.</p>
         </div>
@@ -291,17 +302,95 @@ export default function Configuracion() {
           )}
 
           {rol !== "empresa" && (
-            <div>
-              <label className="block font-bold mb-1">Modalidad preferida</label>
-              <select value={modalidadPreferida} onChange={(e) => setModalidadPreferida(e.target.value)} className="w-full border p-3 rounded">
-                <option value="">Selecciona una opción</option>
-                <option value="tiempo completo">Tiempo Completo</option>
-                <option value="fraccional">Fraccional</option>
-                <option value="proyectos">Por Proyectos</option>
-                <option value="híbrida">Híbrida</option>
-                <option value="remoto">Remoto</option>
-                <option value="presencial">Presencial</option>
-              </select>
+            <div className="space-y-4">
+              <label className="block font-bold mb-3">Modalidades de Trabajo</label>
+              <p className="text-sm text-gray-600 mb-4">Selecciona todas las modalidades de trabajo que te interesan</p>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {[
+                  { id: 'tiempo-completo', label: 'Tiempo completo', description: 'Trabajo de 40+ horas semanales' },
+                  { id: 'fraccional', label: 'Fraccional', description: 'Trabajo ejecutivo fraccional especializado' },
+                  { id: 'part-time', label: 'Part time', description: 'Trabajo de tiempo parcial' },
+                  { id: 'por-proyectos', label: 'Por proyectos', description: 'Proyectos específicos con duración definida' },
+                  { id: 'consultoria', label: 'Consultoría', description: 'Asesoría especializada y estratégica' },
+                  { id: 'mentoria', label: 'Mentoría', description: 'Guía y desarrollo de otros profesionales' }
+                ].map((modalidad) => (
+                  <div
+                    key={modalidad.id}
+                    className={`relative p-4 border-2 rounded-lg cursor-pointer transition-all duration-200 ${
+                      modalidadesTrabajo.includes(modalidad.id)
+                        ? 'border-purple-500 bg-purple-50 dark:bg-purple-900/20'
+                        : 'border-gray-200 hover:border-purple-300'
+                    }`}
+                    onClick={() => handleModalidadChange(modalidad.id)}
+                  >
+                    <div className="flex items-start gap-3">
+                      <div className={`w-5 h-5 border-2 rounded flex-shrink-0 mt-0.5 transition-colors ${
+                        modalidadesTrabajo.includes(modalidad.id)
+                          ? 'border-purple-500 bg-purple-500'
+                          : 'border-gray-300'
+                      }`}>
+                        {modalidadesTrabajo.includes(modalidad.id) && (
+                          <svg className="w-3 h-3 text-white m-0.5" fill="currentColor" viewBox="0 0 20 20">
+                            <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                          </svg>
+                        )}
+                      </div>
+                      <div className="flex-1">
+                        <h4 className="font-semibold text-gray-900 mb-1">
+                          {modalidad.label}
+                        </h4>
+                        <p className="text-sm text-gray-600">
+                          {modalidad.description}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {modalidadesTrabajo.length > 0 && (
+                <div className="mt-4 p-4 bg-purple-100 border border-purple-200 rounded-lg">
+                  <div className="flex items-center gap-2 mb-2">
+                    <svg className="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <span className="font-semibold text-purple-800">
+                      Modalidades seleccionadas:
+                    </span>
+                  </div>
+                  <div className="flex flex-wrap gap-2">
+                    {modalidadesTrabajo.map((modalidad) => {
+                      const modalidadData = [
+                        { id: 'tiempo-completo', label: 'Tiempo completo' },
+                        { id: 'fraccional', label: 'Fraccional' },
+                        { id: 'part-time', label: 'Part time' },
+                        { id: 'por-proyectos', label: 'Por proyectos' },
+                        { id: 'consultoria', label: 'Consultoría' },
+                        { id: 'mentoria', label: 'Mentoría' }
+                      ].find(m => m.id === modalidad);
+                      
+                      return (
+                        <span
+                          key={modalidad}
+                          className="inline-flex items-center gap-1 px-3 py-1 bg-purple-600 text-white text-sm rounded-full"
+                        >
+                          {modalidadData?.label}
+                          <button
+                            type="button"
+                            onClick={() => handleModalidadChange(modalidad)}
+                            className="ml-1 hover:bg-purple-700 rounded-full p-0.5"
+                          >
+                            <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                          </button>
+                        </span>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
             </div>
           )}
 
@@ -313,8 +402,8 @@ export default function Configuracion() {
               onChange={(e) => setDisponibilidad(e.target.value)}
               className="w-full border p-3 rounded"
             >
-              <option value="disponible">🟢 Disponible</option>
-              <option value="con condiciones">🟡 Con condiciones</option>
+              <option value="disponible">[DISPONIBLE] Disponible</option>
+              <option value="con condiciones">[CONDICIONES] Con condiciones</option>
               <option value="no disponible">🔴 No disponible</option>
             </select>
           </div>

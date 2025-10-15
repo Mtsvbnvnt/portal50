@@ -197,7 +197,7 @@ export default function CrearSolicitudEmpleo() {
           {/* Información básica */}
           <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6">
             <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-6">
-              📝 Información básica del puesto
+              [INFORMACIÓN] Información básica del puesto
             </h2>
             
             <div className="grid md:grid-cols-2 gap-6">
@@ -292,7 +292,7 @@ export default function CrearSolicitudEmpleo() {
           {/* Etiquetas */}
           <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6">
             <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-6">
-              🏷️ Etiquetas y habilidades
+              [ETIQUETAS] Etiquetas y habilidades
             </h2>
             
             <div className="mb-4">
@@ -398,7 +398,7 @@ export default function CrearSolicitudEmpleo() {
                       onClick={() => eliminarPregunta(index)}
                       className="text-red-600 hover:text-red-800 ml-3"
                     >
-                      🗑️
+                      [X]
                     </button>
                   </div>
                 ))}

@@ -34,7 +34,7 @@ export default function EditarOferta() {
         setSalario(data.salario || "");
         setEtiquetas((data.etiquetas || []).join(", "));
 
-        // 🟢 Asegurarse de normalizar la estructura al cargar
+        // Asegurarse de normalizar la estructura al cargar
         const parsedPreguntas = Array.isArray(data.preguntas)
           ? data.preguntas.map((p: any) => ({
               pregunta: p?.pregunta || "",

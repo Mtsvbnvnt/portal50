@@ -6,7 +6,7 @@ export default function InfoNuevoProceso() {
   return (
     <div className="bg-blue-50 dark:bg-blue-900 border border-blue-200 dark:border-blue-700 rounded-lg p-6 mb-6">
       <div className="flex items-start gap-3">
-        <div className="text-2xl">ℹ️</div>
+        <div className="text-2xl">[INFO]</div>
         <div className="flex-1">
           <h3 className="font-semibold text-blue-800 dark:text-blue-200 mb-2">
             Nuevo proceso de publicación

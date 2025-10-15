@@ -125,7 +125,7 @@ export default function EjecutivoPanel() {
           {/* Información personal */}
           <div className="md:col-span-2 bg-white rounded-lg shadow-sm p-6">
             <h2 className="text-xl font-semibold text-gray-800 mb-4 flex items-center gap-2">
-              👤 Mi información
+              Mi información
             </h2>
             
             {ejecutivo && (
@@ -162,7 +162,7 @@ export default function EjecutivoPanel() {
           {/* Estadísticas */}
           <div className="bg-white rounded-lg shadow-sm p-6">
             <h2 className="text-xl font-semibold text-gray-800 mb-4 flex items-center gap-2">
-              📊 Estadísticas
+              Estadísticas
             </h2>
             <div className="space-y-4">
               <div className="text-center p-3 bg-blue-50 rounded-lg">
@@ -199,7 +199,7 @@ export default function EjecutivoPanel() {
         <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-xl font-semibold text-gray-800 flex items-center gap-2">
-              📋 Solicitudes de empleo pendientes
+              Solicitudes de empleo pendientes
             </h2>
             <div className="flex gap-2">
               <span className="bg-orange-100 text-orange-800 px-3 py-1 rounded-full text-sm font-medium">
@@ -213,7 +213,7 @@ export default function EjecutivoPanel() {
 
           {solicitudesEmpleo.length === 0 ? (
             <div className="text-center py-12">
-              <div className="text-6xl mb-4">📋</div>
+              <div className="text-6xl mb-4">[SOLICITUDES]</div>
               <h3 className="text-xl font-semibold text-gray-700 mb-2">
                 No hay solicitudes pendientes
               </h3>
@@ -247,9 +247,9 @@ export default function EjecutivoPanel() {
                           ? 'bg-blue-100 text-blue-800'
                           : 'bg-yellow-100 text-yellow-800'
                       }`}>
-                        {solicitud.estado === 'pendiente' && '⏳ Pendiente'}
-                        {solicitud.estado === 'en_revision' && '🔍 En revisión'}
-                        {solicitud.estado === 'con_correcciones' && '✏️ Con correcciones'}
+                        {solicitud.estado === 'pendiente' && 'Pendiente'}
+                        {solicitud.estado === 'en_revision' && 'En revisión'}
+                        {solicitud.estado === 'con_correcciones' && 'Con correcciones'}
                       </span>
                     </div>
                   </div>
@@ -257,7 +257,7 @@ export default function EjecutivoPanel() {
                   <div className="grid md:grid-cols-2 gap-4 mb-4">
                     <div className="space-y-2">
                       <div className="flex items-center gap-2 text-sm">
-                        <span className="font-medium text-gray-600">💼 Modalidad:</span>
+                        <span className="font-medium text-gray-600">[MODALIDAD] Modalidad:</span>
                         <span className="text-gray-800">{solicitud.modalidad}</span>
                       </div>
                       <div className="flex items-center gap-2 text-sm">
@@ -267,7 +267,7 @@ export default function EjecutivoPanel() {
                     </div>
                     <div className="space-y-2">
                       <div className="flex items-center gap-2 text-sm">
-                        <span className="font-medium text-gray-600">💰 Salario:</span>
+                        <span className="font-medium text-gray-600">[SALARIO] Salario:</span>
                         <span className="text-gray-800">{solicitud.salario}</span>
                       </div>
                       <div className="flex items-center gap-2 text-sm">
@@ -303,7 +303,7 @@ export default function EjecutivoPanel() {
                       onClick={() => navigate(`/solicitud-empleo/${solicitud._id}`)}
                       className="flex-1 bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 transition-colors text-sm"
                     >
-                      👁️ Ver detalles
+                      Ver detalles
                     </button>
                     {solicitud.estado === 'pendiente' && (
                       <button
@@ -345,7 +345,7 @@ export default function EjecutivoPanel() {
                         }}
                         className="bg-green-600 text-white py-2 px-4 rounded hover:bg-green-700 transition-colors text-sm"
                       >
-                        📝 Tomar para revisión
+                        Tomar para revisión
                       </button>
                     )}
                   </div>
@@ -358,12 +358,12 @@ export default function EjecutivoPanel() {
         {/* Empresas asignadas */}
         <div className="bg-white rounded-lg shadow-sm p-6">
           <h2 className="text-xl font-semibold text-gray-800 mb-4 flex items-center gap-2">
-            🏢 Empresas asignadas
+            [EMPRESAS] Empresas asignadas
           </h2>
 
           {empresasAsignadas.length === 0 ? (
             <div className="text-center py-12">
-              <div className="text-6xl mb-4">🏢</div>
+              <div className="text-6xl mb-4">[EDIFICIO]</div>
               <h3 className="text-xl font-semibold text-gray-700 mb-2">
                 No tienes empresas asignadas
               </h3>
@@ -380,7 +380,7 @@ export default function EjecutivoPanel() {
                 >
                   <div className="flex items-center gap-3 mb-4">
                     <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
-                      <span className="text-2xl">🏢</span>
+                      <span className="text-xl font-bold">[EMP]</span>
                     </div>
                     <div>
                       <h3 className="font-semibold text-gray-800 text-lg">
@@ -408,7 +408,7 @@ export default function EjecutivoPanel() {
                     </div>
                     
                     <div className="flex items-center gap-2 text-sm">
-                      <span className="font-medium text-gray-600">💼 Experiencia:</span>
+                      <span className="font-medium text-gray-600">[EXPERIENCIA] Experiencia:</span>
                       <span className="text-gray-800">
                         {empresa.experiencia || "No especificada"}
                       </span>
